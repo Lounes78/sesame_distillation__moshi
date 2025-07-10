@@ -1,3 +1,11 @@
+
+
+
+
+
+
+token.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -52,6 +60,7 @@ site/
 
 # Project specific
 token.json
+token2.json
 *.log
 *.db
 *.sqlite3
