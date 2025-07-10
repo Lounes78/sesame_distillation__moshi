@@ -1,0 +1,1 @@
+python examples/voice_chat.py --character Maya --input-device 0 --output-device 2 
