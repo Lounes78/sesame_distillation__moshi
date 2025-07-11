@@ -12,5 +12,5 @@ lookup_response = client.get_account_info(signup_response.id_token)
 print(f"User ID: {lookup_response.local_id}")
 
 # For easier token management, use TokenManager
-token_manager = TokenManager(client, token_file="token2.json")
+token_manager = TokenManager(client, token_file="token.json")
 id_token = token_manager.get_valid_token()
