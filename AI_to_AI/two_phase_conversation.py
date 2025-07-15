@@ -32,7 +32,8 @@ class TwoPhaseConversationManager:
     
     def __init__(self, maya_token="token.json", miles_token="token2.json", filename=None,
                  prompt_file=None, disable_prompt=False, prompt_processing_time=15,
-                 prompt_id=None, random_prompt=False, prompt_topic=None, prompts_csv="prompts/prompts.csv"):
+                 prompt_id=None, random_prompt=False, prompt_topic=None, prompts_csv="prompts/prompts.csv",
+                 stabilization_time=10):
         self.recorder = ConversationRecorder(filename=filename)
         self.maya = AIAgent("Maya", maya_token, self._handle_audio_response)
         self.miles = AIAgent("Miles", miles_token, self._handle_audio_response)
@@ -46,6 +47,7 @@ class TwoPhaseConversationManager:
         self.disable_prompt = disable_prompt
         self.prompt_chunks = None
         self.prompt_processing_time = prompt_processing_time
+        self.stabilization_time = stabilization_time
         
         # New prompt management system
         self.prompt_id = prompt_id
@@ -251,11 +253,11 @@ class TwoPhaseConversationManager:
         with self.phase_lock:
             if not self.cross_feed_enabled:
                 # Phase 1: No cross-feeding
-                print(f"🔇 DEBUG: {character_name} audio received but cross-feed disabled (Phase 1)")
+                # print(f"🔇 DEBUG: {character_name} audio received but cross-feed disabled (Phase 1)")
                 return
-            else:
+            # else:
                 # Phase 2: Enable cross-feeding
-                print(f"🔊 DEBUG: {character_name} audio received - cross-feeding to other AI (Phase 2)")
+                # print(f"🔊 DEBUG: {character_name} audio received - cross-feeding to other AI (Phase 2)")
 
         # Cross-feed to the other agent (same as original system)
         source_agent = self.maya if character_name == "Maya" else self.miles
@@ -296,7 +298,7 @@ class TwoPhaseConversationManager:
                     self.audio_player.start_playback()
                     logger.info("🔊 Proper stereo playback enabled (Maya=Left, Miles=Right)")
                 
-                time.sleep(CONFIG["stabilization_wait_sec"]) # currently setup to 10s
+                time.sleep(self.stabilization_time)
                 
                 # Inject prompt to both AIs and start phase timer
                 self._inject_prompt_to_both()
@@ -372,8 +374,16 @@ def main():
     parser.add_argument("--no-record-prompt", action="store_true",
                        help="Don't include prompt in final recording")
     parser.add_argument("--processing-time", type=int, default=15,
-                       help="Seconds for Phase 1 independent processing (default: 15)") # 15 seconds AFTER prompt injection
+                       help="Seconds for Phase 1 independent processing (default: 15)")
+    parser.add_argument("--stabilization-time", type=int, default=10,
+                       help="Seconds to wait for agent stabilization after connection (default: 10)")
     args = parser.parse_args()
+
+
+    # python two_phase_conversation.py --no-playback --random-prompt --no-record-prompt
+
+    # 15 seconds AFTER prompt injection, stabilization time = 10s
+    # launch at 25s 
 
     # Handle list operations first (exit after listing)
     if args.list_prompts or args.list_topics:
@@ -431,6 +441,7 @@ def main():
     
     # Show configuration
     print(f"⏱️ Phase 1 Duration: {args.processing_time}s (independent processing)")
+    print(f"🔧 Stabilization Time: {args.stabilization_time}s (agent connection wait)")
     
     # Show prompt configuration
     if disable_prompt:
@@ -460,7 +471,8 @@ def main():
         prompt_id=prompt_id,
         random_prompt=random_prompt,
         prompt_topic=prompt_topic,
-        prompts_csv=args.prompts_csv
+        prompts_csv=args.prompts_csv,
+        stabilization_time=args.stabilization_time
     )
     conversation.run()
 
