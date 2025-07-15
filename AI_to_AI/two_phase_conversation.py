@@ -17,6 +17,7 @@ import threading
 
 from audio_processing import CONFIG, SCIPY_AVAILABLE, ProperStereoPlayer, ConversationRecorder, resample_audio, load_audio_prompt, create_fallback_prompt
 from ai_agent import AIAgent
+from prompt_manager import PromptManager, select_prompt
 
 logger = logging.getLogger('sesame.two_phase')
 
@@ -29,8 +30,9 @@ class TwoPhaseConversationManager:
     Phase 2: Connected conversation (cross-feeding enabled)
     """
     
-    def __init__(self, maya_token="token.json", miles_token="token2.json", filename=None, 
-                 prompt_file=None, disable_prompt=False, prompt_processing_time=15):
+    def __init__(self, maya_token="token.json", miles_token="token2.json", filename=None,
+                 prompt_file=None, disable_prompt=False, prompt_processing_time=15,
+                 prompt_id=None, random_prompt=False, prompt_topic=None, prompts_csv="prompts/prompts.csv"):
         self.recorder = ConversationRecorder(filename=filename)
         self.maya = AIAgent("Maya", maya_token, self._handle_audio_response)
         self.miles = AIAgent("Miles", miles_token, self._handle_audio_response)
@@ -45,6 +47,14 @@ class TwoPhaseConversationManager:
         self.prompt_chunks = None
         self.prompt_processing_time = prompt_processing_time
         
+        # New prompt management system
+        self.prompt_id = prompt_id
+        self.random_prompt = random_prompt
+        self.prompt_topic = prompt_topic
+        self.prompts_csv = prompts_csv
+        self.prompt_manager = PromptManager(prompts_csv)
+        self.selected_prompt_info = None
+        
         # Two-phase state management
         self.cross_feed_enabled = False
         self.phase_start_time = None
@@ -55,7 +65,8 @@ class TwoPhaseConversationManager:
 
     def _load_prompt(self):
         """Load and process the audio prompt for conversation initiation."""
-        print(f"🔍 DEBUG: _load_prompt called - disable_prompt={self.disable_prompt}, prompt_file={self.prompt_file}")
+        print(f"🔍 DEBUG: _load_prompt called - disable_prompt={self.disable_prompt}")
+        print(f"🔍 DEBUG: prompt_file={self.prompt_file}, prompt_id={self.prompt_id}, random_prompt={self.random_prompt}")
         
         if self.disable_prompt:
             print("🚫 DEBUG: Prompt disabled by --no-prompt flag, using fallback noise")
@@ -64,29 +75,86 @@ class TwoPhaseConversationManager:
             return
             
         try:
+            selected_prompt_file = None
+            
+            # Priority 1: Direct file path (backward compatibility)
             if self.prompt_file:
-                # Use specified prompt file
-                print(f"📁 DEBUG: Loading custom prompt: {self.prompt_file}")
-                logger.info(f"Loading custom prompt: {self.prompt_file}")
-                self.prompt_chunks = load_audio_prompt(self.prompt_file)
-            else:
-                # Try default prompt file
-                default_prompt = CONFIG["default_prompt_file"]
-                print(f"🔍 DEBUG: Checking default prompt: {default_prompt}, exists={os.path.exists(default_prompt)}")
-                if os.path.exists(default_prompt):
-                    print(f"📁 DEBUG: Loading default prompt: {default_prompt}")
-                    logger.info(f"Loading default prompt: {default_prompt}")
-                    self.prompt_chunks = load_audio_prompt(default_prompt)
+                print(f"📁 DEBUG: Loading custom prompt file: {self.prompt_file}")
+                logger.info(f"Loading custom prompt file: {self.prompt_file}")
+                selected_prompt_file = self.prompt_file
+                self.selected_prompt_info = f"Custom file: {self.prompt_file}"
+                
+            # Priority 2: Specific prompt ID from CSV
+            elif self.prompt_id is not None:
+                print(f"🎯 DEBUG: Loading prompt by ID: {self.prompt_id}")
+                prompt = self.prompt_manager.get_prompt_by_id(self.prompt_id)
+                if prompt:
+                    selected_prompt_file = self.prompt_manager.get_prompt_file_path(prompt)
+                    if selected_prompt_file:
+                        self.selected_prompt_info = f"ID {prompt['prompt_id']}: {prompt['topic']} - {prompt['text'][:50]}..."
+                        logger.info(f"Selected prompt ID {self.prompt_id}: {prompt['topic']}")
+                    else:
+                        print(f"❌ DEBUG: Audio file not found for prompt ID {self.prompt_id}")
+                        logger.error(f"Audio file not found for prompt ID {self.prompt_id}")
                 else:
-                    print("🔀 DEBUG: No prompt file found, using fallback")
-                    logger.info("No prompt file found, using fallback")
-                    self.prompt_chunks = create_fallback_prompt()
+                    print(f"❌ DEBUG: Prompt ID {self.prompt_id} not found in CSV")
+                    logger.error(f"Prompt ID {self.prompt_id} not found in CSV")
+                    
+            # Priority 3: Random prompt selection
+            elif self.random_prompt:
+                print(f"🎲 DEBUG: Loading random prompt (topic filter: {self.prompt_topic})")
+                prompt = self.prompt_manager.get_random_prompt(self.prompt_topic)
+                if prompt:
+                    selected_prompt_file = self.prompt_manager.get_prompt_file_path(prompt)
+                    if selected_prompt_file:
+                        self.selected_prompt_info = f"Random ID {prompt['prompt_id']}: {prompt['topic']} - {prompt['text'][:50]}..."
+                        logger.info(f"Selected random prompt ID {prompt['prompt_id']}: {prompt['topic']}")
+                    else:
+                        print(f"❌ DEBUG: Audio file not found for random prompt ID {prompt['prompt_id']}")
+                        logger.error(f"Audio file not found for random prompt ID {prompt['prompt_id']}")
+                else:
+                    print("❌ DEBUG: No random prompt available")
+                    logger.error("No random prompt available")
+                    
+            # Priority 4: Default behavior - try CSV random, then fallback to original default
+            else:
+                print("🔍 DEBUG: No specific prompt requested, trying random from CSV")
+                prompt = self.prompt_manager.get_random_prompt()
+                if prompt:
+                    selected_prompt_file = self.prompt_manager.get_prompt_file_path(prompt)
+                    if selected_prompt_file:
+                        self.selected_prompt_info = f"Default random ID {prompt['prompt_id']}: {prompt['topic']} - {prompt['text'][:50]}..."
+                        logger.info(f"Selected default random prompt ID {prompt['prompt_id']}: {prompt['topic']}")
+                    else:
+                        print(f"❌ DEBUG: Audio file not found for default random prompt ID {prompt['prompt_id']}")
+                        logger.error(f"Audio file not found for default random prompt ID {prompt['prompt_id']}")
+                
+                # Fallback to original default prompt file
+                if not selected_prompt_file:
+                    default_prompt = CONFIG["default_prompt_file"]
+                    print(f"🔍 DEBUG: Trying original default prompt: {default_prompt}")
+                    if os.path.exists(default_prompt):
+                        selected_prompt_file = default_prompt
+                        self.selected_prompt_info = f"Original default: {default_prompt}"
+                        logger.info(f"Using original default prompt: {default_prompt}")
+            
+            # Load the selected prompt file
+            if selected_prompt_file:
+                print(f"📁 DEBUG: Loading selected prompt: {selected_prompt_file}")
+                self.prompt_chunks = load_audio_prompt(selected_prompt_file)
+                print(f"✅ DEBUG: Successfully loaded prompt: {self.selected_prompt_info}")
+            else:
+                print("🔀 DEBUG: No valid prompt found, using fallback")
+                logger.info("No valid prompt found, using fallback")
+                self.prompt_chunks = create_fallback_prompt()
+                self.selected_prompt_info = "Fallback random noise"
                     
         except (FileNotFoundError, ValueError) as e:
             print(f"❌ DEBUG: Failed to load audio prompt: {e}")
             logger.warning(f"Failed to load audio prompt: {e}")
             logger.info("Using fallback random noise prompt")
             self.prompt_chunks = create_fallback_prompt()
+            self.selected_prompt_info = "Fallback random noise (error)"
 
     def _inject_prompt_to_both(self):
         """Inject the audio prompt to BOTH AIs simultaneously."""
@@ -228,7 +296,7 @@ class TwoPhaseConversationManager:
                     self.audio_player.start_playback()
                     logger.info("🔊 Proper stereo playback enabled (Maya=Left, Miles=Right)")
                 
-                time.sleep(CONFIG["stabilization_wait_sec"])
+                time.sleep(CONFIG["stabilization_wait_sec"]) # currently setup to 10s
                 
                 # Inject prompt to both AIs and start phase timer
                 self._inject_prompt_to_both()
@@ -288,13 +356,42 @@ def main():
     parser = argparse.ArgumentParser(description="Two-Phase Maya-Miles Conversation Recorder")
     parser.add_argument("--filename", help="Custom filename for the recording.")
     parser.add_argument("--no-playback", action="store_true", help="Disable live audio playback")
-    parser.add_argument("--prompt", help="Path to audio prompt file (WAV format)")
+    
+    # Prompt selection options
+    prompt_group = parser.add_mutually_exclusive_group()
+    prompt_group.add_argument("--prompt", help="Path to audio prompt file (WAV format)")
+    prompt_group.add_argument("--prompt-id", type=int, help="Use specific prompt ID from CSV")
+    prompt_group.add_argument("--random-prompt", action="store_true", help="Use random prompt from CSV")
+    
+    parser.add_argument("--prompt-topic", help="Filter prompts by topic (use with --random-prompt)")
+    parser.add_argument("--prompts-csv", default="prompts/prompts.csv", help="Path to prompts CSV file")
+    parser.add_argument("--list-prompts", action="store_true", help="List available prompts and exit")
+    parser.add_argument("--list-topics", action="store_true", help="List available topics and exit")
+    
     parser.add_argument("--no-prompt", action="store_true", help="Disable audio prompt, use random noise")
-    parser.add_argument("--no-record-prompt", action="store_true", 
+    parser.add_argument("--no-record-prompt", action="store_true",
                        help="Don't include prompt in final recording")
     parser.add_argument("--processing-time", type=int, default=15,
-                       help="Seconds for Phase 1 independent processing (default: 15)")
+                       help="Seconds for Phase 1 independent processing (default: 15)") # 15 seconds AFTER prompt injection
     args = parser.parse_args()
+
+    # Handle list operations first (exit after listing)
+    if args.list_prompts or args.list_topics:
+        from prompt_manager import PromptManager
+        manager = PromptManager(args.prompts_csv)
+        
+        if args.list_prompts:
+            prompts = manager.list_prompts()
+            print(f"📋 Available prompts ({len(prompts)} total):")
+            for prompt in prompts:
+                file_status = "✅" if manager.validate_prompt_file(prompt) else "❌"
+                print(f"  {prompt['prompt_id']}: {prompt['topic']} - {prompt['text'][:60]}... {file_status}")
+            return
+            
+        if args.list_topics:
+            topics = manager.list_topics()
+            print(f"🏷️  Available topics: {', '.join(topics)}")
+            return
 
     # Configure playback
     if args.no_playback:
@@ -303,20 +400,23 @@ def main():
     if args.no_record_prompt:
         CONFIG["record_prompt"] = False
     
-    # Determine prompt file to use
-    prompt_file = None
+    # Determine prompt configuration
+    prompt_file = args.prompt
+    prompt_id = args.prompt_id
+    random_prompt = args.random_prompt
+    prompt_topic = args.prompt_topic
     disable_prompt = args.no_prompt
     
-    print(f"🔍 DEBUG: args.no_prompt={args.no_prompt}, disable_prompt={disable_prompt}")
+    print(f"🔍 DEBUG: Prompt configuration:")
+    print(f"  disable_prompt={disable_prompt}")
+    print(f"  prompt_file={prompt_file}")
+    print(f"  prompt_id={prompt_id}")
+    print(f"  random_prompt={random_prompt}")
+    print(f"  prompt_topic={prompt_topic}")
     
-    if not args.no_prompt:
-        if args.prompt:
-            prompt_file = args.prompt
-        else:
-            # Use default if it exists
-            default_prompt = CONFIG["default_prompt_file"]
-            if os.path.exists(default_prompt):
-                prompt_file = default_prompt
+    # Validate prompt topic filter
+    if prompt_topic and not random_prompt:
+        print("⚠️  WARNING: --prompt-topic specified but --random-prompt not used. Topic filter will be ignored.")
 
     # Setup logging
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -331,14 +431,24 @@ def main():
     
     # Show configuration
     print(f"⏱️ Phase 1 Duration: {args.processing_time}s (independent processing)")
+    
+    # Show prompt configuration
     if disable_prompt:
         print("🚫 Audio Prompt: DISABLED (--no-prompt flag)")
     elif prompt_file:
-        print(f"🎙️ Audio Prompt: {prompt_file} → both AIs")
-        if CONFIG["record_prompt"]:
-            print("📝 Prompt will be included in recording")
+        print(f"🎙️ Audio Prompt: Custom file '{prompt_file}' → both AIs")
+    elif prompt_id is not None:
+        print(f"🎯 Audio Prompt: ID {prompt_id} from CSV → both AIs")
+    elif random_prompt:
+        if prompt_topic:
+            print(f"🎲 Audio Prompt: Random from topic '{prompt_topic}' → both AIs")
+        else:
+            print("🎲 Audio Prompt: Random from CSV → both AIs")
     else:
-        print("🔀 Using fallback random noise prompt")
+        print("🔍 Audio Prompt: Auto-select (random from CSV or default) → both AIs")
+    
+    if CONFIG["record_prompt"] and not disable_prompt:
+        print("📝 Prompt will be included in recording")
     
     conversation = TwoPhaseConversationManager(
         maya_token="token0.json",
@@ -346,7 +456,11 @@ def main():
         filename=args.filename,
         prompt_file=prompt_file,
         disable_prompt=disable_prompt,
-        prompt_processing_time=args.processing_time
+        prompt_processing_time=args.processing_time,
+        prompt_id=prompt_id,
+        random_prompt=random_prompt,
+        prompt_topic=prompt_topic,
+        prompts_csv=args.prompts_csv
     )
     conversation.run()
 

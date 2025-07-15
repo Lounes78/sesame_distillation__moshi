@@ -1,12 +1,18 @@
 import os 
+import sys
+
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(project_root)
+
 from sesame_ai import SesameAI, TokenManager
 
 
+print("removing token 0")
 os.remove("token0.json")
-print("Removed token 0")
 
+print("removing token 1")
 os.remove("token1.json")
-print("Removed token 1")
+
 
 for i in range(2):
     # Create API client

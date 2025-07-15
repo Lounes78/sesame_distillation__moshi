@@ -123,7 +123,7 @@ def load_audio_prompt(prompt_file_path, target_rate=None, target_chunk_size=None
     logger.info(f"Loading audio prompt from: {prompt_file_path}")
     
     try:
-        # Load WAV file
+        # Load WAV file with robust handling for streaming WAV files
         with wave.open(prompt_file_path, 'rb') as wav_file:
             # Get WAV file parameters
             channels = wav_file.getnchannels()
@@ -133,8 +133,45 @@ def load_audio_prompt(prompt_file_path, target_rate=None, target_chunk_size=None
             
             logger.info(f"Prompt audio: {channels} channels, {sample_width} bytes/sample, {original_rate}Hz, {total_frames} frames")
             
-            # Read all audio data
-            audio_bytes = wav_file.readframes(total_frames)
+            # Handle streaming WAV files with incorrect headers (total_frames = 0)
+            if total_frames == 0:
+                logger.warning("WAV header shows 0 frames, attempting to read actual audio data...")
+                
+                # Read the entire file and extract audio data manually
+                wav_file.setpos(0)  # Reset to beginning
+                
+                # Try to read a large amount of data to get all available audio
+                audio_bytes = b''
+                try:
+                    # Read in chunks until we can't read anymore
+                    chunk_size = 8192
+                    while True:
+                        chunk = wav_file.readframes(chunk_size)
+                        if not chunk:
+                            break
+                        audio_bytes += chunk
+                except:
+                    # If readframes fails, try reading raw data after WAV header
+                    pass
+                
+                # If still no data, try reading raw file data after WAV header
+                if len(audio_bytes) == 0:
+                    logger.info("Attempting to read raw audio data from file...")
+                    with open(prompt_file_path, 'rb') as raw_file:
+                        # Skip WAV header (typically 44 bytes for standard WAV)
+                        raw_file.seek(44)
+                        audio_bytes = raw_file.read()
+                
+                # Calculate actual frames from data size
+                if len(audio_bytes) > 0:
+                    bytes_per_frame = channels * sample_width
+                    actual_frames = len(audio_bytes) // bytes_per_frame
+                    logger.info(f"Found {actual_frames} actual frames in audio data ({len(audio_bytes)} bytes)")
+                else:
+                    raise ValueError("No audio data found in WAV file")
+            else:
+                # Normal WAV file with correct header
+                audio_bytes = wav_file.readframes(total_frames)
             
             # Convert to numpy array based on sample width
             if sample_width == 1:

@@ -1,0 +1,11 @@
+prompt_id,text,audio_path,topic,voice
+1,Let's talk about space exploration and the future of humanity among the stars,./prompts/science_1_tara.wav,science,tara
+2,Let's discuss artificial intelligence and its transformative impact on society,./prompts/technology_2_tara.wav,technology,tara
+3,Let's explore climate change solutions and environmental sustainability,./prompts/science_3_tara.wav,science,tara
+4,Let's delve into the nature of consciousness and what it means to be aware,./prompts/philosophy_4_tara.wav,philosophy,tara
+5,Let's talk about digital art and how technology is reshaping creative expression,./prompts/arts_5_tara.wav,arts,tara
+6,Let's explore the fascinating world of quantum physics and its mysteries,./prompts/science_6_tara.wav,science,tara
+7,Let's discuss the impact of social media on modern communication and relationships,./prompts/current_events_7_tara.wav,current_events,tara
+8,Let's talk about how music has evolved and its cultural significance,./prompts/arts_8_tara.wav,arts,tara
+9,Let's explore the ethical implications of emerging technologies,./prompts/philosophy_9_tara.wav,philosophy,tara
+10,Let's discuss renewable energy and the transition to sustainable power,./prompts/current_events_10_tara.wav,current_events,tara
