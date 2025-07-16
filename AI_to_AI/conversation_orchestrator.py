@@ -33,6 +33,10 @@ os.environ.pop('HTTP_PROXY', None)
 os.environ.pop('HTTPS_PROXY', None)
 os.environ.pop('ALL_PROXY', None)
 
+import requests
+response = requests.get('https://api.ipify.org')
+print("Public IP via Python:", response.text)
+
 
 
 

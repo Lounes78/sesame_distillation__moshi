@@ -17,8 +17,8 @@ os.environ.pop('HTTP_PROXY', None)
 os.environ.pop('HTTPS_PROXY', None)
 os.environ.pop('ALL_PROXY', None)
 
-# response = requests.get('https://api.ipify.org')
-# print("Public IP via Python:", response.text)
+response = requests.get('https://api.ipify.org')
+print("Public IP via Python:", response.text)
 
 
 
