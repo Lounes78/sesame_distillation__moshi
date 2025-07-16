@@ -1,10 +1,25 @@
 import os 
 import sys
+import requests
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(project_root)
 
 from sesame_ai import SesameAI, TokenManager
+
+# remove proxy conf to use the vpn tunnel since it is request under the hood
+# sudo openvpn --config /mnt/nas/KITT/scrap/fr555.nordvpn.com.tcp.ovpn
+# curl ipinfo.io --noproxy '*'
+
+os.environ.pop('http_proxy', None)
+os.environ.pop('https_proxy', None)
+os.environ.pop('HTTP_PROXY', None)
+os.environ.pop('HTTPS_PROXY', None)
+os.environ.pop('ALL_PROXY', None)
+
+# response = requests.get('https://api.ipify.org')
+# print("Public IP via Python:", response.text)
+
 
 
 print("removing token 0")

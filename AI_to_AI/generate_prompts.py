@@ -67,10 +67,10 @@ def load_prompts_csv(csv_path):
         return []
 
 def update_csv_with_paths(csv_path, updated_prompts):
-    """Update the CSV file with new audio paths"""
+    """Update the CSV file with new audio paths and wav_exists status"""
     try:
         with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-            fieldnames = ['prompt_id', 'text', 'audio_path', 'topic', 'voice']
+            fieldnames = ['prompt_id', 'text', 'audio_path', 'topic', 'voice', 'wav_exists', 'usage_count']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
             for prompt in updated_prompts:
@@ -79,6 +79,24 @@ def update_csv_with_paths(csv_path, updated_prompts):
         return True
     except Exception as e:
         print(f"❌ Failed to update CSV: {e}")
+        return False
+
+def update_single_prompt_in_csv(csv_path, prompt_id, wav_exists_status):
+    """Update a single prompt's wav_exists status in the CSV file"""
+    try:
+        # Read all prompts
+        prompts = load_prompts_csv(csv_path)
+        
+        # Update the specific prompt
+        for prompt in prompts:
+            if int(prompt['prompt_id']) == int(prompt_id):
+                prompt['wav_exists'] = wav_exists_status
+                break
+        
+        # Write back to CSV
+        return update_csv_with_paths(csv_path, prompts)
+    except Exception as e:
+        print(f"❌ Failed to update single prompt in CSV: {e}")
         return False
 
 def generate_all_prompts(csv_path="prompts/prompts.csv", force_regenerate=False):
@@ -101,13 +119,27 @@ def generate_all_prompts(csv_path="prompts/prompts.csv", force_regenerate=False)
         print("❌ No prompts found or failed to load CSV")
         return False
     
-    print(f"📝 Found {len(prompts)} prompts to generate")
+    print(f"📝 Found {len(prompts)} prompts to process")
     
-    # Generate audio for each prompt and update paths
-    success_count = 0
-    updated_prompts = []
+    # Filter prompts that need generation
+    prompts_to_generate = []
+    prompts_already_exist = 0
     
-    for i, prompt in enumerate(prompts, 1):
+    for prompt in prompts:
+        wav_exists = prompt.get('wav_exists', 'false').lower() == 'true'
+        if wav_exists and not force_regenerate:
+            prompts_already_exist += 1
+        else:
+            prompts_to_generate.append(prompt)
+    
+    print(f"📝 Prompts already generated: {prompts_already_exist}")
+    print(f"📝 Prompts to generate: {len(prompts_to_generate)}")
+    
+    # Generate audio for each prompt and update CSV immediately
+    success_count = prompts_already_exist
+    failed_count = 0
+    
+    for i, prompt in enumerate(prompts_to_generate, 1):
         prompt_id = prompt['prompt_id']
         text = prompt['text']
         voice = prompt.get('voice', 'tara')
@@ -117,37 +149,46 @@ def generate_all_prompts(csv_path="prompts/prompts.csv", force_regenerate=False)
         new_filename = f"{topic}_{prompt_id}_{voice}.wav"
         new_audio_path = f"prompts/{new_filename}"
         
-        print(f"\n🎙️ [{i}/{len(prompts)}] Processing prompt {prompt_id} ({topic}):")
+        print(f"\n🎙️ [{i}/{len(prompts_to_generate)}] Processing prompt {prompt_id} ({topic}):")
         print(f"  📁 Target file: {new_audio_path}")
         
-        # Check if file already exists
+        # Check if file already exists (file system check)
         if os.path.exists(new_audio_path) and not force_regenerate:
             print(f"  ⏭️  Audio file already exists: {new_audio_path}")
-            success_count += 1
+            # Update CSV immediately
+            if update_single_prompt_in_csv(csv_path, prompt_id, 'true'):
+                print(f"  ✅ Updated CSV: wav_exists=true for prompt {prompt_id}")
+                success_count += 1
+            else:
+                print(f"  ❌ Failed to update CSV for prompt {prompt_id}")
+                failed_count += 1
         else:
             # Generate audio
             if generate_audio(text, voice, new_audio_path):
-                success_count += 1
+                # Update CSV immediately after successful generation
+                if update_single_prompt_in_csv(csv_path, prompt_id, 'true'):
+                    print(f"  ✅ Generated audio and updated CSV: wav_exists=true for prompt {prompt_id}")
+                    success_count += 1
+                else:
+                    print(f"  ⚠️  Audio generated but failed to update CSV for prompt {prompt_id}")
+                    success_count += 1  # Still count as success since audio was generated
                 # Small delay to avoid overwhelming the server
                 time.sleep(0.5)
             else:
-                print(f"  ❌ Failed to generate audio for prompt {prompt_id}")
-        
-        # Update prompt with new path
-        updated_prompt = prompt.copy()
-        updated_prompt['audio_path'] = f"./prompts/{new_filename}"  # Store relative path with ./prompts/
-        updated_prompts.append(updated_prompt)
-    
-    # Update CSV with new paths
-    if updated_prompts:
-        print(f"\n📝 Updating CSV with new audio paths...")
-        update_csv_with_paths(csv_path, updated_prompts)
+                # Update CSV to mark as failed
+                if update_single_prompt_in_csv(csv_path, prompt_id, 'false'):
+                    print(f"  ❌ Failed to generate audio, updated CSV: wav_exists=false for prompt {prompt_id}")
+                else:
+                    print(f"  ❌ Failed to generate audio and failed to update CSV for prompt {prompt_id}")
+                failed_count += 1
     
     print(f"\n🎉 Generation complete!")
-    print(f"   ✅ Successfully generated: {success_count}/{len(prompts)} prompts")
+    print(f"   ✅ Successfully processed: {success_count}/{len(prompts)} prompts")
+    print(f"   📁 Already existed: {prompts_already_exist} prompts")
+    print(f"   🆕 Newly generated: {success_count - prompts_already_exist} prompts")
     
-    if success_count < len(prompts):
-        print(f"   ⚠️  Failed to generate: {len(prompts) - success_count} prompts")
+    if failed_count > 0:
+        print(f"   ⚠️  Failed to generate: {failed_count} prompts")
         return False
     
     return True
@@ -208,16 +249,14 @@ def main():
         )
         
         if success:
-            # Update CSV with new path
-            prompts = load_prompts_csv(args.csv)
-            for prompt in prompts:
-                if int(prompt['prompt_id']) == args.prompt_id:
-                    prompt['audio_path'] = f"./prompts/{new_filename}"
-                    break
-            
-            update_csv_with_paths(args.csv, prompts)
-            print("✅ Single prompt generation completed!")
+            # Update CSV immediately with new path and wav_exists status
+            if update_single_prompt_in_csv(args.csv, args.prompt_id, 'true'):
+                print("✅ Single prompt generation completed and CSV updated!")
+            else:
+                print("⚠️  Audio generated but failed to update CSV")
         else:
+            # Update CSV to mark as failed
+            update_single_prompt_in_csv(args.csv, args.prompt_id, 'false')
             print("❌ Failed to generate prompt")
             sys.exit(1)
     else:

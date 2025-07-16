@@ -1,10 +1,10 @@
 
 
-
-
-
-
 token.json
+./AI_to_AI/prompts
+./AI_to_AI/conversations
+./AI_to_AI/tokens
+*.wav
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

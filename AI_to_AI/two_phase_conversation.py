@@ -30,10 +30,10 @@ class TwoPhaseConversationManager:
     Phase 2: Connected conversation (cross-feeding enabled)
     """
     
-    def __init__(self, maya_token="token.json", miles_token="token2.json", filename=None,
+    def __init__(self, maya_token="token0.json", miles_token="token1.json", filename=None,
                  prompt_file=None, disable_prompt=False, prompt_processing_time=15,
                  prompt_id=None, random_prompt=False, prompt_topic=None, prompts_csv="prompts/prompts.csv",
-                 stabilization_time=10):
+                 stabilization_time=10, prompt_target="both"):
         self.recorder = ConversationRecorder(filename=filename)
         self.maya = AIAgent("Maya", maya_token, self._handle_audio_response)
         self.miles = AIAgent("Miles", miles_token, self._handle_audio_response)
@@ -48,6 +48,7 @@ class TwoPhaseConversationManager:
         self.prompt_chunks = None
         self.prompt_processing_time = prompt_processing_time
         self.stabilization_time = stabilization_time
+        self.prompt_target = prompt_target
         
         # New prompt management system
         self.prompt_id = prompt_id
@@ -159,8 +160,8 @@ class TwoPhaseConversationManager:
             self.selected_prompt_info = "Fallback random noise (error)"
 
     def _inject_prompt_to_both(self):
-        """Inject the audio prompt to BOTH AIs simultaneously."""
-        print(f"🔍 DEBUG: _inject_prompt_to_both called - disable_prompt={self.disable_prompt}")
+        """Inject the audio prompt to selected AI(s) based on prompt_target."""
+        print(f"🔍 DEBUG: _inject_prompt_to_both called - disable_prompt={self.disable_prompt}, target={self.prompt_target}")
         
         if self.disable_prompt:
             print("🚫 DEBUG: Prompt injection SKIPPED due to --no-prompt flag")
@@ -172,14 +173,29 @@ class TwoPhaseConversationManager:
             logger.error("No prompt chunks available!")
             return
 
-        print(f"🎙️ DEBUG: Injecting audio prompt to BOTH Maya and Miles ({len(self.prompt_chunks)} chunks)")
-        logger.info(f"🎙️ Injecting audio prompt to BOTH Maya and Miles ({len(self.prompt_chunks)} chunks)")
+        # Determine target AIs based on prompt_target setting
+        target_ais = []
+        target_names = []
         
-        # Inject all prompt chunks to both AIs simultaneously
+        if self.prompt_target == "maya":
+            target_ais = [self.maya]
+            target_names = ["Maya"]
+        elif self.prompt_target == "miles":
+            target_ais = [self.miles]
+            target_names = ["Miles"]
+        else:  # "both" or any other value defaults to both
+            target_ais = [self.maya, self.miles]
+            target_names = ["Maya", "Miles"]
+
+        target_str = " and ".join(target_names)
+        print(f"🎙️ DEBUG: Injecting audio prompt to {target_str} ({len(self.prompt_chunks)} chunks)")
+        logger.info(f"🎙️ Injecting audio prompt to {target_str} ({len(self.prompt_chunks)} chunks)")
+        
+        # Inject all prompt chunks to selected AIs
         for i, chunk in enumerate(self.prompt_chunks):
-            self.maya.add_input_audio(chunk)
-            self.miles.add_input_audio(chunk)
-            logger.debug(f"Injected prompt chunk {i+1}/{len(self.prompt_chunks)} to both AIs")
+            for ai in target_ais:
+                ai.add_input_audio(chunk)
+            logger.debug(f"Injected prompt chunk {i+1}/{len(self.prompt_chunks)} to {target_str}")
         
         # If we want to record the prompt in the output
         if CONFIG["record_prompt"]:
@@ -196,15 +212,16 @@ class TwoPhaseConversationManager:
                         CONFIG["conversation_rate"],
                         self.recorder.recording_rate
                     )
-                    # Record as both Maya and Miles receiving the prompt
-                    self.recorder.add_audio("Maya", resampled_chunk)
-                    self.recorder.add_audio("Miles", resampled_chunk)
+                    # Record based on prompt target
+                    for name in target_names:
+                        self.recorder.add_audio(name, resampled_chunk)
                 else:
-                    self.recorder.add_audio("Maya", chunk)
-                    self.recorder.add_audio("Miles", chunk)
+                    # Record based on prompt target
+                    for name in target_names:
+                        self.recorder.add_audio(name, chunk)
         
-        print(f"✅ DEBUG: Prompt injection complete to both AIs")
-        logger.info(f"✅ Prompt injection complete to both AIs")
+        print(f"✅ DEBUG: Prompt injection complete to {target_str}")
+        logger.info(f"✅ Prompt injection complete to {target_str}")
 
     def _start_phase_timer(self):
         """Start the timer for phase transition."""
@@ -357,26 +374,35 @@ def main():
     
     parser = argparse.ArgumentParser(description="Two-Phase Maya-Miles Conversation Recorder")
     parser.add_argument("--filename", help="Custom filename for the recording.")
-    parser.add_argument("--no-playback", action="store_true", help="Disable live audio playback")
+    
+    # Token file arguments
+    parser.add_argument("--maya-token", default="token0.json", help="Maya token file (default: token0.json)")
+    parser.add_argument("--miles-token", default="token1.json", help="Miles token file (default: token1.json)")
     
     # Prompt selection options
     prompt_group = parser.add_mutually_exclusive_group()
     prompt_group.add_argument("--prompt", help="Path to audio prompt file (WAV format)")
     prompt_group.add_argument("--prompt-id", type=int, help="Use specific prompt ID from CSV")
-    prompt_group.add_argument("--random-prompt", action="store_true", help="Use random prompt from CSV")
     
     parser.add_argument("--prompt-topic", help="Filter prompts by topic (use with --random-prompt)")
     parser.add_argument("--prompts-csv", default="prompts/prompts.csv", help="Path to prompts CSV file")
     parser.add_argument("--list-prompts", action="store_true", help="List available prompts and exit")
     parser.add_argument("--list-topics", action="store_true", help="List available topics and exit")
     
-    parser.add_argument("--no-prompt", action="store_true", help="Disable audio prompt, use random noise")
+    # CONSTANT
+    prompt_group.add_argument("--random-prompt", action="store_true", help="Use random prompt from CSV")
+    parser.add_argument("--no-playback", action="store_true", help="Disable live audio playback")
     parser.add_argument("--no-record-prompt", action="store_true",
                        help="Don't include prompt in final recording")
+
+    # VARIABLE
+    parser.add_argument("--no-prompt", action="store_true", help="Disable audio prompt, use random noise")
     parser.add_argument("--processing-time", type=int, default=15,
                        help="Seconds for Phase 1 independent processing (default: 15)")
     parser.add_argument("--stabilization-time", type=int, default=10,
                        help="Seconds to wait for agent stabilization after connection (default: 10)")
+    parser.add_argument("--prompt-target", choices=["maya", "miles", "both"], default="both",
+                       help="Which AI(s) to send the prompt to: maya, miles, or both (default: both)")
     args = parser.parse_args()
 
 
@@ -444,26 +470,27 @@ def main():
     print(f"🔧 Stabilization Time: {args.stabilization_time}s (agent connection wait)")
     
     # Show prompt configuration
+    target_display = args.prompt_target.upper() if args.prompt_target != "both" else "both AIs"
     if disable_prompt:
         print("🚫 Audio Prompt: DISABLED (--no-prompt flag)")
     elif prompt_file:
-        print(f"🎙️ Audio Prompt: Custom file '{prompt_file}' → both AIs")
+        print(f"🎙️ Audio Prompt: Custom file '{prompt_file}' → {target_display}")
     elif prompt_id is not None:
-        print(f"🎯 Audio Prompt: ID {prompt_id} from CSV → both AIs")
+        print(f"🎯 Audio Prompt: ID {prompt_id} from CSV → {target_display}")
     elif random_prompt:
         if prompt_topic:
-            print(f"🎲 Audio Prompt: Random from topic '{prompt_topic}' → both AIs")
+            print(f"🎲 Audio Prompt: Random from topic '{prompt_topic}' → {target_display}")
         else:
-            print("🎲 Audio Prompt: Random from CSV → both AIs")
+            print(f"🎲 Audio Prompt: Random from CSV → {target_display}")
     else:
-        print("🔍 Audio Prompt: Auto-select (random from CSV or default) → both AIs")
+        print(f"🔍 Audio Prompt: Auto-select (random from CSV or default) → {target_display}")
     
     if CONFIG["record_prompt"] and not disable_prompt:
         print("📝 Prompt will be included in recording")
     
     conversation = TwoPhaseConversationManager(
-        maya_token="token0.json",
-        miles_token="token1.json",
+        maya_token=args.maya_token,
+        miles_token=args.miles_token,
         filename=args.filename,
         prompt_file=prompt_file,
         disable_prompt=disable_prompt,
@@ -472,7 +499,8 @@ def main():
         random_prompt=random_prompt,
         prompt_topic=prompt_topic,
         prompts_csv=args.prompts_csv,
-        stabilization_time=args.stabilization_time
+        stabilization_time=args.stabilization_time,
+        prompt_target=args.prompt_target
     )
     conversation.run()
 

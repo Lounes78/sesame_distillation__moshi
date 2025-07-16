@@ -1,11 +1,81 @@
-prompt_id,text,audio_path,topic,voice
-1,Let's talk about space exploration and the future of humanity among the stars,./prompts/science_1_tara.wav,science,tara
-2,Let's discuss artificial intelligence and its transformative impact on society,./prompts/technology_2_tara.wav,technology,tara
-3,Let's explore climate change solutions and environmental sustainability,./prompts/science_3_tara.wav,science,tara
-4,Let's delve into the nature of consciousness and what it means to be aware,./prompts/philosophy_4_tara.wav,philosophy,tara
-5,Let's talk about digital art and how technology is reshaping creative expression,./prompts/arts_5_tara.wav,arts,tara
-6,Let's explore the fascinating world of quantum physics and its mysteries,./prompts/science_6_tara.wav,science,tara
-7,Let's discuss the impact of social media on modern communication and relationships,./prompts/current_events_7_tara.wav,current_events,tara
-8,Let's talk about how music has evolved and its cultural significance,./prompts/arts_8_tara.wav,arts,tara
-9,Let's explore the ethical implications of emerging technologies,./prompts/philosophy_9_tara.wav,philosophy,tara
-10,Let's discuss renewable energy and the transition to sustainable power,./prompts/current_events_10_tara.wav,current_events,tara
+prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
+1,Let's talk about space exploration and the future of humanity among the stars,./prompts/science_1_tara.wav,science,tara,true,0
+2,Let's discuss artificial intelligence and its transformative impact on society,./prompts/technology_2_tara.wav,technology,tara,true,0
+3,Let's explore climate change solutions and environmental sustainability,./prompts/science_3_tara.wav,science,tara,true,0
+4,Let's delve into the nature of consciousness and what it means to be aware,./prompts/philosophy_4_tara.wav,philosophy,tara,true,0
+5,Let's talk about digital art and how technology is reshaping creative expression,./prompts/arts_5_tara.wav,arts,tara,true,0
+6,Let's explore the fascinating world of quantum physics and its mysteries,./prompts/science_6_tara.wav,science,tara,true,0
+7,Let's discuss the impact of social media on modern communication and relationships,./prompts/current_events_7_tara.wav,current_events,tara,true,0
+8,Let's talk about how music has evolved and its cultural significance,./prompts/arts_8_tara.wav,arts,tara,true,0
+9,Let's explore the ethical implications of emerging technologies,./prompts/philosophy_9_tara.wav,philosophy,tara,true,0
+10,Let's discuss renewable energy and the transition to sustainable power,./prompts/current_events_10_tara.wav,current_events,tara,true,0
+11,Let's explore the mysteries of the ocean depths and marine life,./prompts/science_11_zac.wav,science,zac,true,0
+12,Let's discuss the future of virtual reality and immersive experiences,./prompts/technology_12_tara.wav,technology,tara,true,0
+13,Let's talk about the psychology of decision-making and human behavior,./prompts/psychology_13_zac.wav,psychology,zac,true,0
+14,Let's explore different cooking traditions from around the world,./prompts/culture_14_tara.wav,culture,tara,true,0
+15,Let's discuss the importance of mental health and wellness practices,./prompts/health_15_zac.wav,health,zac,true,0
+16,Let's talk about the evolution of language and communication,./prompts/linguistics_16_tara.wav,linguistics,tara,true,0
+17,Let's explore the world of cryptocurrency and blockchain technology,./prompts/finance_17_zac.wav,finance,zac,true,0
+18,Let's discuss the role of education in shaping future generations,./prompts/education_18_tara.wav,education,tara,true,0
+19,Let's talk about sustainable fashion and ethical clothing choices,./prompts/lifestyle_19_zac.wav,lifestyle,zac,true,0
+20,Let's explore the fascinating world of ancient civilizations,./prompts/history_20_tara.wav,history,tara,true,0
+21,Let's discuss the impact of urbanization on modern society,./prompts/sociology_21_zac.wav,sociology,zac,true,0
+22,Let's talk about the therapeutic benefits of nature and outdoor activities,./prompts/wellness_22_tara.wav,wellness,tara,true,0
+23,Let's explore the world of competitive gaming and esports,./prompts/gaming_23_zac.wav,gaming,zac,true,0
+24,Let's discuss the future of transportation and autonomous vehicles,./prompts/transportation_24_tara.wav,transportation,tara,true,0
+25,Let's talk about the art of storytelling across different mediums,./prompts/literature_25_zac.wav,literature,zac,true,0
+26,Let's explore the science behind sleep and dreams,./prompts/neuroscience_26_tara.wav,neuroscience,tara,true,0
+27,Let's discuss the role of humor in human relationships and society,./prompts/humor_27_zac.wav,humor,zac,true,0
+28,Let's talk about the impact of globalization on local cultures,./prompts/globalization_28_tara.wav,globalization,tara,true,0
+29,Let's explore the world of extreme sports and adventure activities,./prompts/sports_29_zac.wav,sports,zac,true,0
+30,Let's discuss the ethics of genetic engineering and biotechnology,./prompts/bioethics_30_tara.wav,bioethics,tara,true,0
+31,Let's talk about the influence of architecture on human behavior,./prompts/architecture_31_zac.wav,architecture,zac,true,0
+32,Let's explore the mysteries of human memory and learning,./prompts/cognition_32_tara.wav,cognition,tara,true,0
+33,Let's discuss the future of work and automation,./prompts/economics_33_zac.wav,economics,zac,true,0
+34,Let's talk about the cultural significance of festivals and celebrations,./prompts/anthropology_34_tara.wav,anthropology,tara,true,0
+35,Let's explore the world of documentary filmmaking and truth-telling,./prompts/media_35_zac.wav,media,zac,true,0
+36,Let's discuss the importance of biodiversity and ecosystem conservation,./prompts/ecology_36_tara.wav,ecology,tara,true,0
+37,Let's talk about the psychology of creativity and innovation,./prompts/creativity_37_zac.wav,creativity,zac,true,0
+38,Let's explore the world of street art and urban expression,./prompts/street_art_38_tara.wav,street_art,tara,true,0
+39,Let's discuss the impact of meditation and mindfulness practices,./prompts/mindfulness_39_zac.wav,mindfulness,zac,true,0
+40,Let's talk about the evolution of photography as an art form,./prompts/photography_40_tara.wav,photography,tara,true,0
+41,Let's explore the science of weather patterns and climate systems,./prompts/meteorology_41_zac.wav,meteorology,zac,true,0
+42,Let's discuss the role of pets and animals in human well-being,./prompts/animals_42_tara.wav,animals,tara,true,0
+43,Let's talk about the future of space tourism and commercial spaceflight,./prompts/space_tourism_43_zac.wav,space_tourism,zac,true,0
+44,Let's explore the world of board games and strategic thinking,./prompts/board_games_44_tara.wav,board_games,tara,true,0
+45,Let's discuss the impact of artificial lighting on human circadian rhythms,./prompts/chronobiology_45_zac.wav,chronobiology,zac,true,0
+46,Let's talk about the art of negotiation and conflict resolution,./prompts/negotiation_46_tara.wav,negotiation,tara,true,0
+47,Let's explore the world of renewable materials and sustainable design,./prompts/sustainability_47_zac.wav,sustainability,zac,true,0
+48,Let's discuss the psychology of color and its effects on mood,./prompts/color_psychology_48_tara.wav,color_psychology,tara,true,0
+49,Let's talk about the future of personalized medicine and healthcare,./prompts/medicine_49_zac.wav,medicine,zac,true,0
+50,Let's explore the world of underground music scenes and subcultures,./prompts/subculture_50_tara.wav,subculture,tara,true,0
+51,Let's discuss the impact of social movements on historical change,./prompts/social_movements_51_zac.wav,social_movements,zac,true,0
+52,Let's talk about the science of addiction and recovery,./prompts/addiction_52_tara.wav,addiction,tara,true,0
+53,Let's explore the world of artisanal crafts and traditional skills,./prompts/crafts_53_zac.wav,crafts,zac,true,0
+54,Let's discuss the role of intuition in decision-making processes,./prompts/intuition_54_tara.wav,intuition,tara,true,0
+55,Let's talk about the impact of noise pollution on urban environments,./prompts/acoustics_55_zac.wav,acoustics,zac,true,0
+56,Let's explore the world of competitive cooking and culinary arts,./prompts/culinary_56_tara.wav,culinary,tara,true,0
+57,Let's discuss the future of renewable energy storage solutions,./prompts/energy_storage_57_zac.wav,energy_storage,zac,true,0
+58,Let's talk about the psychology of risk-taking and adventure,./prompts/risk_psychology_58_tara.wav,risk_psychology,tara,true,0
+59,Let's explore the world of citizen science and community research,./prompts/citizen_science_59_zac.wav,citizen_science,zac,true,0
+60,Let's discuss the impact of automation on creative industries,./prompts/automation_creativity_60_tara.wav,automation_creativity,tara,true,0
+61,Let's talk about the science of happiness and positive psychology,./prompts/positive_psychology_61_zac.wav,positive_psychology,zac,true,0
+62,Let's explore the world of alternative healing and holistic medicine,./prompts/alternative_medicine_62_tara.wav,alternative_medicine,tara,true,0
+63,Let's discuss the future of human enhancement and transhumanism,./prompts/transhumanism_63_zac.wav,transhumanism,zac,true,0
+64,Let's talk about the cultural impact of memes and internet culture,./prompts/internet_culture_64_tara.wav,internet_culture,tara,true,0
+65,Let's explore the world of minimalism and intentional living,./prompts/minimalism_65_zac.wav,minimalism,zac,true,0
+66,Let's discuss the science of plant intelligence and communication,./prompts/plant_science_66_tara.wav,plant_science,tara,true,0
+67,Let's talk about the psychology of procrastination and productivity,./prompts/productivity_67_zac.wav,productivity,zac,true,0
+68,Let's explore the world of urban farming and vertical agriculture,./prompts/urban_farming_68_tara.wav,urban_farming,tara,true,0
+69,Let's discuss the impact of artificial intelligence on artistic creation,./prompts/ai_art_69_zac.wav,ai_art,zac,true,0
+70,Let's talk about the future of human-computer interaction and interfaces,./prompts/hci_70_tara.wav,hci,tara,true,0
+71,Let's explore the world of biomimicry and nature-inspired innovation,./prompts/biomimicry_71_zac.wav,biomimicry,zac,true,0
+72,Let's discuss the psychology of social media and digital relationships,./prompts/digital_psychology_72_tara.wav,digital_psychology,tara,true,0
+73,Let's talk about the science of fermentation and food preservation,./prompts/fermentation_73_zac.wav,fermentation,zac,true,0
+74,Let's explore the world of competitive puzzle solving and brain games,./prompts/puzzles_74_tara.wav,puzzles,tara,true,0
+75,Let's discuss the future of sustainable cities and smart infrastructure,./prompts/smart_cities_75_zac.wav,smart_cities,zac,true,0
+76,Let's talk about the art of improvisation in music and performance,./prompts/improvisation_76_tara.wav,improvisation,tara,true,0
+77,Let's explore the world of deep sea exploration and marine technology,./prompts/marine_tech_77_zac.wav,marine_tech,zac,true,0
+78,Let's discuss the impact of cultural exchange on global understanding,./prompts/cultural_exchange_78_tara.wav,cultural_exchange,tara,true,0
+79,Let's talk about the science of aging and longevity research,./prompts/longevity_79_zac.wav,longevity,zac,true,0
+80,Let's explore the world of experimental music and sound design,./prompts/sound_design_80_tara.wav,sound_design,tara,true,0
