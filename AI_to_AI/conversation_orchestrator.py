@@ -53,6 +53,28 @@ logging.basicConfig(
 logger = logging.getLogger('orchestrator')
 
 
+def get_available_prompt_count():
+    """Get the number of available prompts from the CSV file."""
+    try:
+        import csv
+        prompts_file = Path("prompts/prompts.csv")
+        
+        if not prompts_file.exists():
+            logger.warning(f"Prompts file not found: {prompts_file}")
+            return 380  # Fallback to original hardcoded value
+        
+        with open(prompts_file, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            prompt_count = sum(1 for row in reader)
+            
+        logger.info(f"📋 Found {prompt_count} prompts in CSV file")
+        return prompt_count
+        
+    except Exception as e:
+        logger.error(f"Error reading prompts CSV: {e}")
+        return 380  # Fallback to original hardcoded value
+
+
 class ConversationOrchestrator:
     """
     Orchestrates large-scale AI-to-AI conversation generation.
@@ -74,6 +96,9 @@ class ConversationOrchestrator:
         self.tokens_dir.mkdir(exist_ok=True)
         self.conversations_dir.mkdir(exist_ok=True)
         
+        # Get available prompt count dynamically
+        self.max_prompt_id = get_available_prompt_count()
+        
         # Statistics
         self.stats = {
             'tokens_generated': 0,
@@ -83,6 +108,7 @@ class ConversationOrchestrator:
         }
         
         logger.info(f"🚀 Orchestrator initialized - Batch {batch_number}, Size {batch_size}")
+        logger.info(f"📋 Using {self.max_prompt_id} available prompts")
     
     def generate_token_pool(self):
         """
@@ -179,7 +205,7 @@ class ConversationOrchestrator:
         Run a single batch of conversations with parameter variations.
         
         Parameter variations:
-        - 25% no prompt
+        - 10% no prompt
         - Processing time: gaussian around 15s (10-20s range)
         - Stabilization time: gaussian around 10s (7-15s range)
         - Prompt target: 70% both, 15% maya, 15% miles
@@ -252,12 +278,12 @@ class ConversationOrchestrator:
         """Generate conversation parameters with specified distributions."""
         params = {}
         
-        # Prompt configuration (25% no prompt)
-        params['use_prompt'] = random.random() > 0.25
+        # Prompt configuration (10% no prompt)
+        params['use_prompt'] = random.random() > 0.10
         
         if params['use_prompt']:
-            # Select random prompt ID (1-80 based on CSV)
-            params['prompt_id'] = random.randint(1, 80)
+            # Select random prompt ID (1-max_prompt_id based on CSV)
+            params['prompt_id'] = random.randint(1, self.max_prompt_id)
             
             # Prompt target distribution (70% both, 15% maya, 15% miles)
             rand = random.random()
