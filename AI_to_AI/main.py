@@ -2,6 +2,7 @@
 """
 Configurable batch orchestrator to run multiple batches of conversation_orchestrator.py
 with customizable batch sizes and number of batches.
+Includes VPN rotation to prevent IP blocking.
 """
 
 import os
@@ -13,8 +14,21 @@ import wave
 import statistics
 import logging
 import argparse
+import getpass
+import random
 from datetime import datetime
 from pathlib import Path
+
+
+
+# to force the program to go through the vpn tunnel
+os.environ.pop('http_proxy', None)
+os.environ.pop('https_proxy', None)
+os.environ.pop('HTTP_PROXY', None)
+os.environ.pop('HTTPS_PROXY', None)
+os.environ.pop('ALL_PROXY', None)
+
+
 
 # Setup logging
 logging.basicConfig(
@@ -26,6 +40,132 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Global variable to store sudo password
+SUDO_PASSWORD = None
+
+def get_sudo_password():
+    """Prompt for sudo password at the beginning of the script."""
+    global SUDO_PASSWORD
+    if SUDO_PASSWORD is None:
+        print("🔐 VPN rotation requires sudo privileges for OpenVPN management.")
+        SUDO_PASSWORD = getpass.getpass("Please enter your sudo password: ")
+    return SUDO_PASSWORD
+
+def get_available_vpn_configs():
+    """Get list of available VPN configuration files."""
+    vpn_config_dir = Path("/mnt/nas/KITT/DISTILLATION/VPN_config")
+    vpn_configs = list(vpn_config_dir.glob("*.ovpn"))
+    
+    if not vpn_configs:
+        logger.error("❌ No VPN configuration files found in VPN_config directory")
+        return []
+    
+    logger.info(f"🌐 Found {len(vpn_configs)} VPN configurations:")
+    for config in vpn_configs:
+        logger.info(f"   📁 {config.name}")
+    
+    return vpn_configs
+
+def kill_all_openvpn_processes():
+    """Kill all existing OpenVPN processes."""
+    try:
+        logger.info("🔪 Killing all existing OpenVPN processes...")
+        
+        # Use sudo to kill all openvpn processes
+        sudo_password = get_sudo_password()
+        kill_cmd = f"echo '{sudo_password}' | sudo -S pkill -f openvpn"
+        
+        result = subprocess.run(
+            kill_cmd,
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode == 0:
+            logger.info("✅ All OpenVPN processes killed successfully")
+        else:
+            # pkill returns 1 if no processes found, which is fine
+            if "no process found" in result.stderr.lower() or result.returncode == 1:
+                logger.info("ℹ️ No existing OpenVPN processes found")
+            else:
+                logger.warning(f"⚠️ pkill returned code {result.returncode}: {result.stderr}")
+        
+        # Wait a moment for processes to fully terminate
+        time.sleep(2)
+        
+    except Exception as e:
+        logger.error(f"❌ Error killing OpenVPN processes: {e}")
+
+def start_vpn_connection(vpn_config_path):
+    """Start a new VPN connection with the specified config."""
+    try:
+        logger.info(f"🌐 Starting VPN connection: {vpn_config_path.name}")
+        
+        sudo_password = get_sudo_password()
+        
+        # Start OpenVPN in background
+        vpn_cmd = f"echo '{sudo_password}' | sudo -S openvpn --config {vpn_config_path} --daemon"
+        
+        result = subprocess.run(
+            vpn_cmd,
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+        
+        if result.returncode == 0:
+            logger.info("✅ VPN connection started successfully")
+            
+            # Wait for VPN to establish connection
+            logger.info("⏳ Waiting for VPN connection to establish...")
+            time.sleep(10)
+            
+            # Verify new IP
+            try:
+                import requests
+                ip_response = requests.get('https://api.ipify.org', timeout=10)
+                new_ip = ip_response.text.strip()
+                logger.info(f"🌍 New public IP: {new_ip}")
+                return True
+            except Exception as e:
+                logger.warning(f"⚠️ Could not verify new IP: {e}")
+                return True  # Assume VPN is working
+                
+        else:
+            logger.error(f"❌ Failed to start VPN: {result.stderr}")
+            return False
+            
+    except Exception as e:
+        logger.error(f"❌ Error starting VPN connection: {e}")
+        return False
+
+def switch_vpn_for_batch(batch_number, vpn_configs):
+    """Switch to a different VPN configuration for the given batch."""
+    if not vpn_configs:
+        logger.warning("⚠️ No VPN configurations available, continuing without VPN rotation")
+        return True
+    
+    # Select VPN config based on batch number (rotate through available configs)
+    config_index = batch_number % len(vpn_configs)
+    selected_config = vpn_configs[config_index]
+    
+    logger.info(f"🔄 Switching VPN for batch {batch_number}")
+    logger.info(f"📍 Selected VPN: {selected_config.name} ({config_index + 1}/{len(vpn_configs)})")
+    
+    # Kill existing VPN connections
+    kill_all_openvpn_processes()
+    
+    # Start new VPN connection
+    success = start_vpn_connection(selected_config)
+    
+    if success:
+        logger.info(f"✅ VPN rotation complete for batch {batch_number}")
+    else:
+        logger.error(f"❌ VPN rotation failed for batch {batch_number}")
+    
+    return success
 
 def clean_tokens_directory():
     """Remove all files in tokens directory"""
@@ -190,7 +330,7 @@ def format_duration(seconds):
 
 def main():
     # Parse command line arguments
-    parser = argparse.ArgumentParser(description='Run batch orchestrator for AI-to-AI conversations')
+    parser = argparse.ArgumentParser(description='Run batch orchestrator for AI-to-AI conversations with VPN rotation')
     parser.add_argument('--start-batch', type=int, default=0,
                        help='Starting batch number (default: 0)')
     parser.add_argument('--end-batch', type=int, default=9,
@@ -199,6 +339,8 @@ def main():
                        help='Number of conversations per batch (default: 50)')
     parser.add_argument('--num-batches', type=int, default=None,
                        help='Number of batches to run (overrides end-batch if specified)')
+    parser.add_argument('--no-vpn-rotation', action='store_true',
+                       help='Disable VPN rotation between batches')
     args = parser.parse_args()
     
     # Handle num-batches parameter
@@ -219,6 +361,20 @@ def main():
     logger.info(f"🚀 Starting {total_batches} batches of conversation orchestrator (batch {args.start_batch} to {args.end_batch})")
     logger.info(f"📊 Batch size: {args.batch_size} conversations per batch")
     
+    # Initialize VPN rotation if enabled
+    vpn_configs = []
+    if not args.no_vpn_rotation:
+        logger.info("🌐 Initializing VPN rotation system...")
+        vpn_configs = get_available_vpn_configs()
+        if vpn_configs:
+            logger.info(f"✅ VPN rotation enabled with {len(vpn_configs)} configurations")
+            # Prompt for sudo password once at the beginning
+            get_sudo_password()
+        else:
+            logger.warning("⚠️ No VPN configs found, continuing without VPN rotation")
+    else:
+        logger.info("🚫 VPN rotation disabled by user")
+    
     batch_stats = []
     
     for batch_num in range(args.start_batch, args.end_batch + 1):
@@ -226,12 +382,21 @@ def main():
         logger.info(f"🎯 BATCH {batch_num} STARTING")
         logger.info(f"{'='*60}")
         
-        # Step 1: Clean tokens directory
-        logger.info(f"🧹 Cleaning tokens directory for batch {batch_num}")
+        # Step 1: Switch VPN for this batch (if enabled)
+        if vpn_configs:
+            logger.info(f"🔄 Step 1: VPN Rotation for batch {batch_num}")
+            vpn_success = switch_vpn_for_batch(batch_num, vpn_configs)
+            if not vpn_success:
+                logger.error(f"❌ VPN rotation failed for batch {batch_num}, continuing anyway...")
+            else:
+                logger.info("✅ VPN rotation successful, proceeding with batch")
+        
+        # Step 2: Clean tokens directory
+        logger.info(f"🧹 Step 2: Cleaning tokens directory for batch {batch_num}")
         clean_tokens_directory()
         
-        # Step 2: Generate tokens
-        logger.info(f"🔑 Generating tokens for batch {batch_num}")
+        # Step 3: Generate tokens
+        logger.info(f"🔑 Step 3: Generating tokens for batch {batch_num}")
         token_cmd = [
             "python", "conversation_orchestrator.py",
             "--batch-size", str(args.batch_size),
@@ -263,8 +428,8 @@ def main():
             time.sleep(60)
             continue
         
-        # Step 3: Launch conversations
-        logger.info(f"🎭 Launching conversations for batch {batch_num}")
+        # Step 4: Launch conversations
+        logger.info(f"🎭 Step 4: Launching conversations for batch {batch_num}")
         conv_cmd = [
             "python", "conversation_orchestrator.py",
             "--batch-size", str(available_pairs),
@@ -302,7 +467,8 @@ def main():
             logger.error(f"❌ Conversation launch failed: {e}")
             continue
         
-        # Step 4: Analyze batch audio
+        # Step 5: Analyze batch audio
+        logger.info(f"📊 Step 5: Analyzing batch {batch_num} results")
         batch_analysis = analyze_batch_wav_files(batch_num)
         batch_stats.append({
             'batch': batch_num,
@@ -382,6 +548,29 @@ def main():
         logger.info(f"   Batch {batch_num}: {requested}→{available}→{generated} (req→tokens→wav), {format_duration(analysis['total_duration'])} ({batch_hours:.2f}h)")
     
     logger.info("🎉 All batches completed!")
+    
+    # Cleanup: Kill VPN processes if we used VPN rotation
+    if vpn_configs:
+        logger.info("🧹 Cleaning up VPN connections...")
+        kill_all_openvpn_processes()
+        logger.info("✅ VPN cleanup complete")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        logger.info("⚠️ Script interrupted by user")
+        # Try to cleanup VPN processes on interrupt
+        try:
+            kill_all_openvpn_processes()
+            logger.info("✅ VPN cleanup complete")
+        except:
+            pass
+    except Exception as e:
+        logger.error(f"💥 Script failed: {e}")
+        # Try to cleanup VPN processes on error
+        try:
+            kill_all_openvpn_processes()
+            logger.info("✅ VPN cleanup complete")
+        except:
+            pass
