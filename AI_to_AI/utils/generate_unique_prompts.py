@@ -6,8 +6,8 @@ from anthropic import AnthropicVertex
 from difflib import SequenceMatcher
 
 # Set up authentication and project
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/home/lounes/.config/gcloud/application_default_credentials.json'
-PROJECT_ID = ''
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'XXXXXXXX'
+PROJECT_ID = 'XXXXXXXXXXXXXXXXX'
 LOCATION = 'us-east5'
 
 class UniquePromptGenerator:
