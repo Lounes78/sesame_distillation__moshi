@@ -53,26 +53,47 @@ logging.basicConfig(
 logger = logging.getLogger('orchestrator')
 
 
-def get_available_prompt_count():
-    """Get the number of available prompts from the CSV file."""
+def get_prompt_id_range():
+    """Get the min and max prompt IDs from the CSV file."""
     try:
         import csv
-        prompts_file = Path("prompts/prompts.csv")
+        prompts_file = Path("prompts/prompts2.csv")
         
         if not prompts_file.exists():
             logger.warning(f"Prompts file not found: {prompts_file}")
-            return 380  # Fallback to original hardcoded value
+            return 1, 380  # Fallback to original hardcoded values
         
+        prompt_ids = []
         with open(prompts_file, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
-            prompt_count = sum(1 for row in reader)
-            
+            for row in reader:
+                # Assuming the prompt ID column is named 'id' or 'prompt_id'
+                # Try common column names
+                prompt_id = None
+                for col_name in ['id', 'prompt_id', 'ID', 'Prompt_ID']:
+                    if col_name in row:
+                        prompt_id = int(row[col_name])
+                        break
+                
+                if prompt_id is not None:
+                    prompt_ids.append(prompt_id)
+        
+        if not prompt_ids:
+            logger.warning("No prompt IDs found in CSV file")
+            return 1, 380  # Fallback
+        
+        min_id = min(prompt_ids)
+        max_id = max(prompt_ids)
+        prompt_count = len(prompt_ids)
+        
         logger.info(f"📋 Found {prompt_count} prompts in CSV file")
-        return prompt_count
+        logger.info(f"📊 Prompt ID range: {min_id} to {max_id}")
+        
+        return min_id, max_id
         
     except Exception as e:
         logger.error(f"Error reading prompts CSV: {e}")
-        return 380  # Fallback to original hardcoded value
+        return 1, 380  # Fallback to original hardcoded values
 
 
 class ConversationOrchestrator:
@@ -96,8 +117,8 @@ class ConversationOrchestrator:
         self.tokens_dir.mkdir(exist_ok=True)
         self.conversations_dir.mkdir(exist_ok=True)
         
-        # Get available prompt count dynamically
-        self.max_prompt_id = get_available_prompt_count()
+        # Get available prompt ID range dynamically
+        self.min_prompt_id, self.max_prompt_id = get_prompt_id_range()
         
         # Statistics
         self.stats = {
@@ -108,7 +129,7 @@ class ConversationOrchestrator:
         }
         
         logger.info(f"🚀 Orchestrator initialized - Batch {batch_number}, Size {batch_size}")
-        logger.info(f"📋 Using {self.max_prompt_id} available prompts")
+        logger.info(f"📋 Using prompt ID range: {self.min_prompt_id} to {self.max_prompt_id}")
     
     def generate_token_pool(self):
         """
@@ -282,8 +303,8 @@ class ConversationOrchestrator:
         params['use_prompt'] = random.random() > 0.10
         
         if params['use_prompt']:
-            # Select random prompt ID (1-max_prompt_id based on CSV)
-            params['prompt_id'] = random.randint(1, self.max_prompt_id)
+            # Select random prompt ID (min_prompt_id to max_prompt_id based on CSV)
+            params['prompt_id'] = random.randint(self.min_prompt_id, self.max_prompt_id)
             
             # Prompt target distribution (70% both, 15% maya, 15% miles)
             rand = random.random()

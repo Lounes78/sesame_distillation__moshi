@@ -5,6 +5,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1084,"If you could ask one question about career satisfaction to your future self, what would it be?",./prompts/science_1084_tara.wav,science,tara,True,0
 1085,What's something about remote work culture that genuinely surprises people who haven't experienced it?,./prompts/science_1085_zac.wav,science,zac,True,0
 1086,What's one trend in professional development that excites you but worries others?,./prompts/science_1086_tara.wav,science,tara,True,0
+1087,What's changed about your views on work-life balance since you started your career?,./prompts/science_1087_zac.wav,science,zac,True,0
 1088,How has your relationship with ambition evolved as you've gained more professional experience?,./prompts/science_1088_tara.wav,science,tara,True,0
 1089,What unwritten rule in your industry do you think desperately needs to be spoken aloud?,./prompts/science_1089_zac.wav,science,zac,True,0
 1090,"How do you think the concept of ""dream job"" misleads people entering the workforce?",./prompts/science_1090_tara.wav,science,tara,True,0
@@ -182,6 +183,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1262,What would happen if you had to make every important choice in your life within sixty seconds?,./prompts/science_1262_tara.wav,science,tara,True,0
 1263,Tell me about a time when following your gut instinct led you somewhere you never could have planned.,./prompts/science_1263_zac.wav,science,zac,True,0
 1264,What's your most memorable experience with choosing between two things you desperately wanted but couldn't have both?,./prompts/science_1264_tara.wav,science,tara,True,0
+1265,How do you handle the weight of knowing that choosing one path means permanently closing doors to others?,./prompts/science_1265_zac.wav,science,zac,True,0
 1266,What's the strangest factor that has ever been the deciding element in an important life choice you made?,./prompts/science_1266_tara.wav,science,tara,True,0
 1267,In what ways do you think your biggest life regrets have actually shaped your better decisions?,./prompts/science_1267_zac.wav,science,zac,True,0
 1268,How has watching someone else make a terrible choice changed the way you approach similar crossroads?,./prompts/science_1268_tara.wav,science,tara,True,0
@@ -403,6 +405,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1484,What's the most unconventional thing that's contributed to your wellbeing that others might find surprising or wouldn't think to try?,./prompts/science_1484_tara.wav,science,tara,True,0
 1485,How do you choose what personal boundaries to share with new friends versus keeping to yourself?,./prompts/science_1485_zac.wav,science,zac,True,0
 1486,What's something everyone should know about maintaining friendships during major life transitions like marriage or parenthood?,./prompts/science_1486_tara.wav,science,tara,True,0
+1487,What's something about sibling relationships that surprises people who don't have brothers or sisters?,./prompts/science_1487_zac.wav,science,zac,True,0
 1488,How do you think people in 100 years will view our current approach to online dating and digital relationships?,./prompts/science_1488_tara.wav,science,tara,True,0
 1489,"If you could ask one question about their childhood to better understand any person, what would it be?",./prompts/science_1489_zac.wav,science,zac,True,0
 1490,What's your biggest challenge with knowing when to offer advice versus just listening to loved ones?,./prompts/science_1490_tara.wav,science,tara,True,0
@@ -420,6 +423,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1502,What's something you've learned recently about yourself that completely shifted how you approach new challenges?,./prompts/science_1502_tara.wav,science,tara,True,0
 1503,"If you could travel back to give your teenage self one piece of learning advice, what would it be?",./prompts/science_1503_zac.wav,science,zac,True,0
 1504,Tell me about a time when failing at something taught you more than any success ever could.,./prompts/science_1504_tara.wav,science,tara,True,0
+1505,"If you could eliminate one thing about traditional education systems, what would create the biggest positive impact?",./prompts/science_1505_zac.wav,science,zac,True,0
 1506,"If you could have a conversation with someone who mastered a skill you're struggling with, who would it be?",./prompts/science_1506_tara.wav,science,tara,True,0
 1507,What's your philosophy on the balance between formal education and real-world experience in developing expertise?,./prompts/science_1507_zac.wav,science,zac,True,0
 1508,Describe a moment when you realized you were thinking about a problem in a completely wrong way.,./prompts/science_1508_tara.wav,science,tara,True,0
@@ -711,6 +715,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1794,How do you think skill-sharing between generations will evolve as technology continues advancing rapidly?,./prompts/science_1794_tara.wav,science,tara,True,0
 1795,What's something you do differently than most people when it comes to retaining information you've just learned?,./prompts/science_1795_zac.wav,science,zac,True,0
 1796,"If mentorship was mandatory for every adult, who would you choose to learn from and what would you teach?",./prompts/science_1796_tara.wav,science,tara,True,0
+1797,How do you decide when it's time to abandon a skill you've invested years developing for something completely new?,./prompts/science_1797_zac.wav,science,zac,True,0
 1798,What's your take on whether we're becoming better learners or just better at finding quick answers online?,./prompts/science_1798_tara.wav,science,tara,True,0
 1799,"If you could redesign how society validates expertise, what would matter more than degrees and certifications?",./prompts/science_1799_zac.wav,science,zac,True,0
 1800,How do you think our relationship with making mistakes will need to change as automation handles routine tasks?,./prompts/science_1800_tara.wav,science,tara,True,0
@@ -828,10 +833,12 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1912,How has exploring different places shifted what you consider essential versus luxury?,./prompts/science_1912_tara.wav,science,tara,True,0
 1913,What's one cultural practice you've encountered that made you question your own assumptions?,./prompts/science_1913_zac.wav,science,zac,True,0
 1914,"If you could experience one historical moment in any location, where would you witness it?",./prompts/science_1914_tara.wav,science,tara,True,0
+1915,"When you think about the smell of a place you've visited, which destination immediately comes to mind and why?",./prompts/science_1915_zac.wav,science,zac,True,0
 1916,What's your biggest challenge with adapting to local customs when you're somewhere completely unfamiliar with your background?,./prompts/science_1916_tara.wav,science,tara,True,0
 1917,"If you could change one rule about how we document our travels, what would it be?",./prompts/science_1917_zac.wav,science,zac,True,0
 1918,When do you feel most like an outsider while exploring—and has that ever led to unexpected connections?,./prompts/science_1918_tara.wav,science,tara,True,0
 1919,How do you approach conversations with locals when you don't share a common language?,./prompts/science_1919_zac.wav,science,zac,True,0
+1920,What's one thing you'd tell your younger self about the difference between being a tourist versus a traveler?,./prompts/science_1920_tara.wav,science,tara,True,0
 1921,How do you handle that moment when a destination doesn't match the version you built in your head?,./prompts/science_1921_zac.wav,science,zac,True,0
 1922,"If you could have unlimited access to any closed or restricted location worldwide, where would you explore first?",./prompts/science_1922_tara.wav,science,tara,True,0
 1923,What's the strangest cultural misunderstanding you've witnessed or experienced while someone was trying to be respectful?,./prompts/science_1923_zac.wav,science,zac,True,0
@@ -864,6 +871,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1950,How has your relationship with creative failure evolved since you first started exploring artistic pursuits or self-expression?,./prompts/science_1950_tara.wav,science,tara,True,0
 1951,"If you could witness the invention of any artistic medium or tool throughout history, which moment would reveal the most?",./prompts/science_1951_zac.wav,science,zac,True,0
 1952,"What role does vulnerability play in your creative work, and how do you decide what's too personal to share?",./prompts/science_1952_tara.wav,science,tara,True,0
+1953,How do you navigate the tension between creating for yourself versus creating for an audience or market demand?,./prompts/science_1953_zac.wav,science,zac,True,0
 1954,In what ways do you think our childhood experiences with creativity shape our adult relationship with artistic risk-taking?,./prompts/science_1954_tara.wav,science,tara,True,0
 1955,What's one creative tradition or practice from another culture that you find fascinating but have never tried yourself?,./prompts/science_1955_zac.wav,science,zac,True,0
 1956,"How has your understanding of what counts as ""real art"" shifted as you've encountered different forms of creative expression?",./prompts/science_1956_tara.wav,science,tara,True,0
@@ -880,6 +888,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 1967,"If money wasn't a factor, which daily inconvenience would you immediately hire someone else to handle?",./prompts/science_1967_zac.wav,science,zac,True,0
 1968,How do you think your relationship with time would shift if clocks suddenly became less precise?,./prompts/science_1968_tara.wav,science,tara,True,0
 1969,What's one small way you've noticed your living space affects your mental state throughout the day?,./prompts/science_1969_zac.wav,science,zac,True,0
+1970,How do you decide when to push through discomfort versus when to listen to your body's limits?,./prompts/science_1970_tara.wav,science,tara,True,0
 1971,What's your approach to maintaining friendships when everyone's schedules seem impossibly busy?,./prompts/science_1971_zac.wav,science,zac,True,0
 1972,"If you could eliminate one daily decision you have to make repeatedly, which would it be?",./prompts/science_1972_tara.wav,science,tara,True,0
 1973,What's one thing about your evening wind-down routine that helps you process the day's experiences?,./prompts/science_1973_zac.wav,science,zac,True,0
@@ -934,6 +943,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2022,"If you could change one unspoken rule about how we're supposed to spend our weekends, what would it be?",./prompts/science_2022_tara.wav,science,tara,True,0
 2023,What's your favorite way to transition between work mode and relaxation mode at the end of a day?,./prompts/science_2023_zac.wav,science,zac,True,0
 2024,"If you could redesign the typical morning routine from scratch, what would you prioritize differently than most people do?",./prompts/science_2024_tara.wav,science,tara,True,0
+2025,"If you could ask one question about their daily habits to someone from 100 years ago, what would it be?",./prompts/science_2025_zac.wav,science,zac,True,0
 2026,What's something you do differently than most people when it comes to handling interruptions or unexpected changes in your day?,./prompts/science_2026_tara.wav,science,tara,True,0
 2027,What's one small ritual or habit that completely shifts your mood when you're feeling stuck or overwhelmed?,./prompts/science_2027_zac.wav,science,zac,True,0
 2028,"If you had to teach someone the art of doing nothing productively, what would your first lesson focus on?",./prompts/science_2028_tara.wav,science,tara,True,0
@@ -1051,6 +1061,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2140,What's something about your communication style that you've noticed differs significantly from your family or closest friends?,./prompts/science_2140_tara.wav,science,tara,True,0
 2141,How would your daily priorities shift if you knew exactly how much time you spent on each activity?,./prompts/science_2141_zac.wav,science,zac,True,0
 2142,What's one assumption people make about childhood memories that you've found to be completely wrong?,./prompts/science_2142_tara.wav,science,tara,True,0
+2143,"If you could travel back to give your teenage self one piece of practical advice, what would it be?",./prompts/science_2143_zac.wav,science,zac,True,0
 2144,What's your relationship with objects that hold sentimental value—do you keep everything or selectively preserve certain items?,./prompts/science_2144_tara.wav,science,tara,True,0
 2145,How do you handle moments when nostalgia feels more painful than comforting?,./prompts/science_2145_zac.wav,science,zac,True,0
 2146,What draws you to certain smells or sounds that instantly transport you to a specific time and place?,./prompts/science_2146_tara.wav,science,tara,True,0
@@ -1198,6 +1209,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2288,What's one trend in how younger generations process nostalgia that either excites or concerns you the most?,./prompts/science_2288_tara.wav,science,tara,True,0
 2289,What's the most valuable lesson an embarrassing memory from your past has taught you about personal growth?,./prompts/science_2289_zac.wav,science,zac,True,0
 2290,How do you handle the weird feeling when a place from your childhood looks completely different now?,./prompts/science_2290_tara.wav,science,tara,True,0
+2291,"If you could warn your past self about one experience without changing the outcome, what would it be?",./prompts/science_2291_zac.wav,science,zac,True,0
 2292,"What's your unpopular opinion about the phrase ""those were simpler times"" when people discuss previous decades?",./prompts/science_2292_tara.wav,science,tara,True,0
 2293,How do you know when it's healthy nostalgia versus getting stuck living in the past?,./prompts/science_2293_zac.wav,science,zac,True,0
 2294,"What's one memory that feels completely surreal now, like it happened to a different version of yourself?",./prompts/science_2294_tara.wav,science,tara,True,0
@@ -1257,6 +1269,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2348,"When you think about the small talk you make with neighbors or acquaintances, what topics do you find genuinely interesting?",./prompts/science_2348_tara.wav,science,tara,True,0
 2349,How do you know when you've truly connected with a place versus just being a tourist passing through?,./prompts/science_2349_zac.wav,science,zac,True,0
 2350,"If you could live in a world where borders didn't exist, what would you miss most about cultural boundaries?",./prompts/science_2350_tara.wav,science,tara,True,0
+2351,How do you balance respecting local customs while staying true to your own values when they clash?,./prompts/science_2351_zac.wav,science,zac,True,0
 2352,How do you think learning a language shapes who we are beyond just communication skills?,./prompts/science_2352_tara.wav,science,tara,True,0
 2353,What's the most valuable lesson a complete travel disaster has taught you about yourself or life?,./prompts/science_2353_zac.wav,science,zac,True,0
 2354,What's the hardest part about returning home after experiencing a completely different way of living?,./prompts/science_2354_tara.wav,science,tara,True,0
@@ -1392,7 +1405,9 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2484,Tell me about a time when you had to choose between being liked and being effective.,./prompts/science_2484_tara.wav,science,tara,True,0
 2485,What's the difference between a job that drains you and one that energizes you daily?,./prompts/science_2485_zac.wav,science,zac,True,0
 2486,"When you think about retirement, does the idea excite you or make you feel lost?",./prompts/science_2486_tara.wav,science,tara,True,0
+2487,How do you handle the gap between what you studied and what you actually do?,./prompts/science_2487_zac.wav,science,zac,True,0
 2488,What's one skill you wish someone had taught you before entering the professional world?,./prompts/science_2488_tara.wav,science,tara,True,0
+2489,"If your teenage self could see your current job, what would surprise them most?",./prompts/science_2489_zac.wav,science,zac,True,0
 2490,What's your strategy for dealing with colleagues who take credit for collaborative work and ideas?,./prompts/science_2490_tara.wav,science,tara,True,0
 2491,How has remote work changed your definition of what makes a productive work environment?,./prompts/science_2491_zac.wav,science,zac,True,0
 2492,What's the most valuable lesson you've learned from a boss you couldn't stand working for?,./prompts/science_2492_tara.wav,science,tara,True,0
@@ -1438,6 +1453,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2532,How would your energy levels change if you could eliminate just one recurring daily responsibility forever?,./prompts/science_2532_tara.wav,science,tara,True,0
 2533,What's the most embarrassing thing you've realized about your own habits by living with someone else?,./prompts/science_2533_zac.wav,science,zac,True,0
 2534,How do you think the fear of making mistakes affects how boldly we pursue new skills?,./prompts/science_2534_tara.wav,science,tara,True,0
+2535,"If you could eliminate one thing about traditional education systems, what would create the biggest positive impact?",./prompts/science_2535_zac.wav,science,zac,True,0
 2536,What's one moment when learning something completely changed how you see the world around you?,./prompts/science_2536_tara.wav,science,tara,True,0
 2537,How do you handle that frustrating plateau phase when progress feels completely invisible despite consistent effort?,./prompts/science_2537_zac.wav,science,zac,True,0
 2538,"If you could master any skill instantly, would you choose something practical or purely for personal joy?",./prompts/science_2538_tara.wav,science,tara,True,0
@@ -1451,6 +1467,8 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2546,How do you balance pushing yourself to grow versus accepting your natural limitations and preferences?,./prompts/science_2546_tara.wav,science,tara,True,0
 2547,What's one thing about your own learning process that surprised you when you really paid attention?,./prompts/science_2547_zac.wav,science,zac,True,0
 2548,How do you cope with the inevitable culture shock moments that make you question your own assumptions?,./prompts/science_2548_tara.wav,science,tara,True,0
+2549,Tell me about a time when a language barrier led to an unexpectedly meaningful connection with someone.,./prompts/science_2549_zac.wav,science,zac,True,0
+2550,What would happen if you could only travel using transportation methods from 100 years ago for a month?,./prompts/science_2550_tara.wav,science,tara,True,0
 2551,How do you think growing up in your specific hometown affects the way you interpret foreign cultures?,./prompts/science_2551_zac.wav,science,zac,True,0
 2552,What's one thing you'd tell your younger self about the difference between being a tourist versus a traveler?,./prompts/science_2552_tara.wav,science,tara,True,0
 2553,"How would you explain the concept of ""wanderlust"" to someone who feels genuinely content never leaving home?",./prompts/science_2553_zac.wav,science,zac,True,0
@@ -1481,16 +1499,19 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2578,"When do you feel most connected to your younger self - through old photos, familiar scents, or revisiting childhood places?",./prompts/science_2578_tara.wav,science,tara,True,0
 2579,What draws you to certain decades or eras you never actually lived through but feel mysteriously nostalgic about?,./prompts/science_2579_zac.wav,science,zac,True,0
 2580,What's your secret to distinguishing between genuinely cherished memories and ones you think you should feel sentimental about?,./prompts/science_2580_tara.wav,science,tara,True,0
+2581,How do you think people in 100 years will view our current obsession with documenting every moment digitally?,./prompts/science_2581_zac.wav,science,zac,True,0
 2582,"Which of your past selves would be most surprised by who you've become, and what would shock them most?",./prompts/science_2582_tara.wav,science,tara,True,0
 2583,"If you could give your most painful memory a different ending, would you, or has it shaped you too fundamentally?",./prompts/science_2583_zac.wav,science,zac,True,0
 2584,How do shared memories with someone change after that relationship ends - do they feel tainted or more precious?,./prompts/science_2584_tara.wav,science,tara,True,0
 2585,"What's one small, seemingly insignificant moment from your past that randomly surfaces in your mind with startling clarity?",./prompts/science_2585_zac.wav,science,zac,True,0
 2586,"If you could experience one ""first time"" again with fresh eyes, would you choose something joyful or transformative?",./prompts/science_2586_tara.wav,science,tara,True,0
+2587,How do you handle discovering that a cherished childhood memory might be partially constructed or influenced by family stories?,./prompts/science_2587_zac.wav,science,zac,True,0
 2588,What's your prediction for the future of live concerts once virtual reality becomes completely indistinguishable from reality?,./prompts/science_2588_tara.wav,science,tara,True,0
 2589,What's the difference between a hobby that energizes you versus one that helps you decompress?,./prompts/science_2589_zac.wav,science,zac,True,0
 2590,How do you think social media has affected the way people approach photography as a creative outlet?,./prompts/science_2590_tara.wav,science,tara,True,0
 2591,"If you could go back and experience discovering your favorite book, movie, or album for the first time again, which would you choose?",./prompts/science_2591_zac.wav,science,zac,True,0
 2592,"What's your relationship with collecting things - are you a minimalist, a curator, or somewhere in between?",./prompts/science_2592_tara.wav,science,tara,True,0
+2593,"If you could witness the invention of any form of entertainment throughout history, what would fascinate you most?",./prompts/science_2593_zac.wav,science,zac,True,0
 2594,Describe your ideal creative space - what would it look like and what would you actually create there?,./prompts/science_2594_tara.wav,science,tara,True,0
 2595,What leisure activity do you think reveals the most about someone's true personality when you observe them doing it?,./prompts/science_2595_zac.wav,science,zac,True,0
 2596,"What's something you used to find boring that you now genuinely enjoy, and what changed your perspective?",./prompts/science_2596_tara.wav,science,tara,True,0
@@ -1551,6 +1572,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2651,"What's one family tradition you'd never continue, and one you'd definitely pass down?",./prompts/science_2651_zac.wav,science,zac,True,0
 2652,"When do you feel most like yourself—alone, with family, friends, or romantic partners?",./prompts/science_2652_tara.wav,science,tara,True,0
 2653,What's something you've learned recently about how technology is changing the way we form and maintain relationships?,./prompts/science_2653_zac.wav,science,zac,True,0
+2654,"If you could have a conversation with the inventor of any piece of technology, what would you ask them?",./prompts/science_2654_tara.wav,science,tara,True,0
 2655,What role does artificial intelligence play in your daily routine without you even realizing it?,./prompts/science_2655_zac.wav,science,zac,True,0
 2656,Tell me about a time when technology failed you at the worst possible moment.,./prompts/science_2656_tara.wav,science,tara,True,0
 2657,What's your relationship with notifications - do you control them or do they control you?,./prompts/science_2657_zac.wav,science,zac,True,0
@@ -1608,6 +1630,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 2709,What would happen if you could temporarily give someone else one of your most cherished childhood memories to experience firsthand?,./prompts/science_2709_zac.wav,science,zac,True,0
 2710,What's your process for deciding which old photos or mementos are worth keeping versus letting go when decluttering your space?,./prompts/science_2710_tara.wav,science,tara,True,0
 2711,"What motivates you to revisit certain places from your past, even when you know they've probably changed completely since then?",./prompts/science_2711_zac.wav,science,zac,True,0
+2712,"If you could eliminate one thing about how nostalgia affects your decision-making, what would it be and why?",./prompts/science_2712_tara.wav,science,tara,True,0
 2713,"What's something about the way memory actually works that you wish more people understood when sharing their ""perfect recall"" stories?",./prompts/science_2713_zac.wav,science,zac,True,0
 2714,How do you think the stories our families choose to tell and retell about us shape who we become?,./prompts/science_2714_tara.wav,science,tara,True,0
 2715,What would you do if you discovered that a foundational childhood memory you've always treasured never actually happened the way you remember?,./prompts/science_2715_zac.wav,science,zac,True,0
@@ -1982,15 +2005,18 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3084,What's your favorite way to connect with locals without falling into performative cultural exchange or tokenism?,./prompts/science_3084_tara.wav,science,tara,True,0
 3085,"If you could only travel using one method of transportation for the rest of your life, what would it be?",./prompts/science_3085_zac.wav,science,zac,True,0
 3086,What's the most valuable thing you've learned from a travel experience that went completely wrong or off-plan?,./prompts/science_3086_tara.wav,science,tara,True,0
+3087,How do you decide whether to research a destination extensively beforehand or arrive with minimal expectations and knowledge?,./prompts/science_3087_zac.wav,science,zac,True,0
 3088,What's one cultural practice from your travels that you wish you could seamlessly integrate into your daily life?,./prompts/science_3088_tara.wav,science,tara,True,0
 3089,"What motivates some people to collect passport stamps versus others who prefer deep, slow exploration of fewer places?",./prompts/science_3089_zac.wav,science,zac,True,0
 3090,"What's your unpopular opinion about the pressure to be constantly ""growing"" or ""finding yourself"" through travel experiences?",./prompts/science_3090_tara.wav,science,tara,True,0
+3091,"If you had to choose between perfect physical health or perfect mental clarity, which would you pick?",./prompts/science_3091_zac.wav,science,zac,True,0
 3092,How do you think personal growth would be different if we celebrated small wins more than major milestones?,./prompts/science_3092_tara.wav,science,tara,True,0
 3093,"How important is having a morning routine to you, and what happens when it gets disrupted?",./prompts/science_3093_zac.wav,science,zac,True,0
 3094,"How do you think the concept of ""self-care"" will evolve over the next decade?",./prompts/science_3094_tara.wav,science,tara,True,0
 3095,What's the difference between being disciplined and being obsessive when it comes to health habits?,./prompts/science_3095_zac.wav,science,zac,True,0
 3096,Why do some people thrive under stress while others completely shut down in similar situations?,./prompts/science_3096_tara.wav,science,tara,True,0
 3097,What's one wellness trend that sounds appealing but you think might actually be harmful long-term?,./prompts/science_3097_zac.wav,science,zac,True,0
+3098,How do you navigate the balance between accepting yourself as you are versus pushing for improvement?,./prompts/science_3098_tara.wav,science,tara,True,0
 3099,How do you think childhood experiences shape our relationship with food and exercise as adults?,./prompts/science_3099_zac.wav,science,zac,True,0
 3100,What's the difference between healthy solitude and isolation when it comes to mental well-being?,./prompts/science_3100_tara.wav,science,tara,True,0
 3101,"If you had to teach someone resilience in just one conversation, what story would you tell?",./prompts/science_3101_zac.wav,science,zac,True,0
@@ -2005,7 +2031,9 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3110,What's one piece of conventional career advice that would be completely wrong for achieving your personal definition of success?,./prompts/science_3110_tara.wav,science,tara,True,0
 3111,"If you had to choose between being remembered for your achievements or your character, which legacy matters more?",./prompts/science_3111_zac.wav,science,zac,True,0
 3112,What's something you're deliberately avoiding planning for because you're hoping your future self will handle it better?,./prompts/science_3112_tara.wav,science,tara,True,0
+3113,"When you imagine your ideal ordinary Tuesday ten years from now, what small details make that day feel perfect?",./prompts/science_3113_zac.wav,science,zac,True,0
 3114,Tell me about a time when a piece of entertainment completely changed your perspective on something important.,./prompts/science_3114_tara.wav,science,tara,True,0
+3115,"If you could have unlimited access to any form of entertainment for life, but had to give up all others, what would you choose?",./prompts/science_3115_zac.wav,science,zac,True,0
 3116,What's one piece of conventional wisdom about work-life balance that you completely disagree with based on your experience?,./prompts/science_3116_tara.wav,science,tara,True,0
 3117,What's your favorite way to decompress that most people would find either boring or completely overwhelming?,./prompts/science_3117_zac.wav,science,zac,True,0
 3118,"If you could change one thing about how society views leisure time, what would it be and why?",./prompts/science_3118_tara.wav,science,tara,True,0
@@ -2033,6 +2061,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3140,What's your theory on why some people seem naturally gifted at picking up new skills?,./prompts/science_3140_tara.wav,science,tara,True,0
 3141,"If you could redesign how society approaches continuous learning, what would you change first?",./prompts/science_3141_zac.wav,science,zac,True,0
 3142,What's one skill you wish they taught in school that would have helped your mental health journey?,./prompts/science_3142_tara.wav,science,tara,True,0
+3143,"If you could change one rule about how society talks about wellness, what would it be?",./prompts/science_3143_zac.wav,science,zac,True,0
 3144,What's your favorite way to reset when you're feeling completely overwhelmed by life's demands?,./prompts/science_3144_tara.wav,science,tara,True,0
 3145,"What's your take on the idea that we need to ""earn"" rest through productivity?",./prompts/science_3145_zac.wav,science,zac,True,0
 3146,Tell me about a time when ignoring conventional health advice actually worked better for you.,./prompts/science_3146_tara.wav,science,tara,True,0
@@ -2107,10 +2136,12 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3215,"If you had to choose one creative work to represent your entire inner world, what medium would capture you best?",./prompts/science_3215_zac.wav,science,zac,True,0
 3216,How do you think AI-generated art will change what we value about human imperfection in creative expression?,./prompts/science_3216_tara.wav,science,tara,True,0
 3217,What would happen to your sense of self if you were suddenly unable to express creativity in your preferred way?,./prompts/science_3217_zac.wav,science,zac,True,0
+3218,"If you could experience the creative process of any artist throughout history, whose mind would you want to inhabit?",./prompts/science_3218_tara.wav,science,tara,True,0
 3219,How do you think growing up with endless creative tutorials online changes the relationship between struggle and artistic growth?,./prompts/science_3219_zac.wav,science,zac,True,0
 3220,"If you could redesign how schools teach problem-solving, what unconventional method would you introduce to help students think more creatively?",./prompts/science_3220_tara.wav,science,tara,True,0
 3221,"If you could have a conversation with someone who solved a problem that seemed impossible, who would it be and why?",./prompts/science_3221_zac.wav,science,zac,True,0
 3222,How do you think your approach to handling unexpected setbacks compares to others your age when everything goes wrong?,./prompts/science_3222_tara.wav,science,tara,True,0
+3223,"If you could witness the invention of any problem-solving tool or method throughout history, which moment would fascinate you most?",./prompts/science_3223_zac.wav,science,zac,True,0
 3224,How do you approach problems when your first three solutions fail and you're running out of time or options?,./prompts/science_3224_tara.wav,science,tara,True,0
 3225,What's the most valuable lesson a complete failure has taught you about tackling challenges you initially thought were easy?,./prompts/science_3225_zac.wav,science,zac,True,0
 3226,"If you could live in a world where every problem had multiple correct solutions, how would that change society?",./prompts/science_3226_tara.wav,science,tara,True,0
@@ -2192,6 +2223,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3302,How do you reconcile loving certain seasonal activities that might not be the most sustainable choices?,./prompts/science_3302_tara.wav,science,tara,True,0
 3303,"How do you define ""authentic"" travel experiences, and do you think authenticity can coexist with tourism infrastructure?",./prompts/science_3303_zac.wav,science,zac,True,0
 3304,How do you think people in 100 years will view our current approach to preserving historical sites and monuments?,./prompts/science_3304_tara.wav,science,tara,True,0
+3305,"If you could witness the invention of any form of transportation throughout history, which would reveal the most about humanity?",./prompts/science_3305_zac.wav,science,zac,True,0
 3306,"If you could change one thing about how your own culture is typically portrayed to outsiders, what would it be?",./prompts/science_3306_tara.wav,science,tara,True,0
 3307,What's something you do differently than most people when it comes to navigating unfamiliar places or social customs?,./prompts/science_3307_zac.wav,science,zac,True,0
 3308,"If money wasn't a factor, would you choose to live as a permanent nomad or put down deeper roots somewhere?",./prompts/science_3308_tara.wav,science,tara,True,0
@@ -2375,6 +2407,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3486,How do you think social media has changed the relationship between creating art and sharing it with others?,./prompts/science_3486_tara.wav,science,tara,True,0
 3487,What's one creative risk you've been avoiding because the potential for failure or judgment feels too overwhelming right now?,./prompts/science_3487_zac.wav,science,zac,True,0
 3488,"How would you describe the feeling of being ""in the zone"" creatively to someone who's never experienced that flow?",./prompts/science_3488_tara.wav,science,tara,True,0
+3489,"If you could witness the invention of any workplace technology from the past century, which would fascinate you most and why?",./prompts/science_3489_zac.wav,science,zac,True,0
 3490,"If you could have unlimited access to mentorship from any professional in history, whose guidance would transform your career trajectory?",./prompts/science_3490_tara.wav,science,tara,True,0
 3491,"If you could master any soft skill overnight that would revolutionize how you work with others, what would it be?",./prompts/science_3491_zac.wav,science,zac,True,0
 3492,"If you could travel back to your first day at any job, what advice would you whisper to yourself?",./prompts/science_3492_tara.wav,science,tara,True,0
@@ -2425,6 +2458,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3537,"How do you think birth order actually influences personality, based on your own family dynamics you've observed?",./prompts/science_3537_zac.wav,science,zac,True,0
 3538,"What's one relationship boundary you wish you'd established earlier, and how would it have changed things?",./prompts/science_3538_tara.wav,science,tara,True,0
 3539,Tell me about someone who challenged your perspective on what healthy conflict in relationships looks like.,./prompts/science_3539_zac.wav,science,zac,True,0
+3540,How do you navigate maintaining your individual identity while being part of a committed partnership or marriage?,./prompts/science_3540_tara.wav,science,tara,True,0
 3541,What's one piece of relationship advice that sounds wise but you think is actually harmful in practice?,./prompts/science_3541_zac.wav,science,zac,True,0
 3542,How do you think grief brings some families closer together while driving others permanently apart?,./prompts/science_3542_tara.wav,science,tara,True,0
 3543,When did you first realize that your values might be different from those of your family or community?,./prompts/science_3543_zac.wav,science,zac,True,0
@@ -2442,6 +2476,8 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3555,What's the most valuable lesson a failed goal has taught you about how you approach new aspirations?,./prompts/science_3555_zac.wav,science,zac,True,0
 3556,"If you could witness the moment when someone discovers their true calling, whose would you choose?",./prompts/science_3556_tara.wav,science,tara,True,0
 3557,"What's one thing about pursuing dreams that always makes you smile, even during tough times?",./prompts/science_3557_zac.wav,science,zac,True,0
+3558,How do you choose what dreams to actively pursue versus which ones to let go?,./prompts/science_3558_tara.wav,science,tara,True,0
+3559,How do you think your definition of a meaningful life compares to others your age?,./prompts/science_3559_zac.wav,science,zac,True,0
 3560,"If you had to bet everything on one skill becoming crucial in twenty years, what would it be?",./prompts/science_3560_tara.wav,science,tara,True,0
 3561,What's something you desperately wanted five years ago that you're now grateful you didn't get?,./prompts/science_3561_zac.wav,science,zac,True,0
 3562,"Which of your current goals would surprise your teenage self the most, and why?",./prompts/science_3562_tara.wav,science,tara,True,0
@@ -2558,6 +2594,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3673,How has technology affected your ability to commit to choices without constantly second-guessing through endless research and comparisons?,./prompts/science_3673_zac.wav,science,zac,True,0
 3674,What's the most valuable lesson you've learned from a decision that felt wrong at the time but right later?,./prompts/science_3674_tara.wav,science,tara,True,0
 3675,What's your approach when people you trust give you completely contradictory advice about an important life choice?,./prompts/science_3675_zac.wav,science,zac,True,0
+3676,How do you handle the weight of knowing that choosing one path means permanently closing doors to others?,./prompts/science_3676_tara.wav,science,tara,True,0
 3677,What's the strangest or most unexpected factor that ended up being crucial in one of your major life decisions?,./prompts/science_3677_zac.wav,science,zac,True,0
 3678,"If you could eliminate one common piece of decision-making advice from existence, what would it be and why?",./prompts/science_3678_tara.wav,science,tara,True,0
 3679,What's your philosophy on making decisions that primarily benefit your future self versus your current happiness and comfort?,./prompts/science_3679_zac.wav,science,zac,True,0
@@ -2621,6 +2658,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3737,"If you could eliminate one common excuse people make when facing challenges, which excuse would create the biggest positive change?",./prompts/science_3737_zac.wav,science,zac,True,0
 3738,What's the most valuable lesson about persistence you've learned from watching someone else navigate a long-term struggle or goal?,./prompts/science_3738_tara.wav,science,tara,True,0
 3739,"If you had to teach problem-solving using only examples from your worst mistakes, what would be your most important lesson?",./prompts/science_3739_zac.wav,science,zac,True,0
+3740,"If you could eliminate one societal pressure around career choices, what would it be and why?",./prompts/science_3740_tara.wav,science,tara,True,0
 3741,What role does failure play in shaping the goals you're most passionate about pursuing?,./prompts/science_3741_zac.wav,science,zac,True,0
 3742,What's your secret to maintaining motivation when your long-term dreams feel impossibly distant or unrealistic?,./prompts/science_3742_tara.wav,science,tara,True,0
 3743,How has your relationship with ambition changed since you were younger and more idealistic about life?,./prompts/science_3743_zac.wav,science,zac,True,0
@@ -2722,6 +2760,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3839,How do you navigate the tension between documenting your travels and actually being present in the moment?,./prompts/science_3839_zac.wav,science,zac,True,0
 3840,What assumption about a place or culture were you completely wrong about until you experienced it firsthand?,./prompts/science_3840_tara.wav,science,tara,True,0
 3841,What's the most meaningful conversation you've had with someone who spoke a completely different language than you?,./prompts/science_3841_zac.wav,science,zac,True,0
+3842,How has exploring different places changed what you consider essential versus luxury in your daily life?,./prompts/science_3842_tara.wav,science,tara,True,0
 3843,What would you choose if you could only travel to places that challenged your existing worldview?,./prompts/science_3843_zac.wav,science,zac,True,0
 3844,What's something about human connection that transcends cultural boundaries that surprised you while exploring?,./prompts/science_3844_tara.wav,science,tara,True,0
 3845,What's the hardest part about maintaining enthusiasm for a hobby once you've moved past the beginner's excitement phase?,./prompts/science_3845_zac.wav,science,zac,True,0
@@ -2771,6 +2810,7 @@ prompt_id,text,audio_path,topic,voice,wav_exists,usage_count
 3889,What's the difference between a memory that brings you comfort and one that motivates you to change?,./prompts/science_3889_zac.wav,science,zac,True,0
 3890,What's the best advice about letting go of the past that you've actually found useful in practice?,./prompts/science_3890_tara.wav,science,tara,True,0
 3891,In what ways do you think your childhood home still influences how you arrange your current living space?,./prompts/science_3891_zac.wav,science,zac,True,0
+3892,How do you cope with realizing that your memory of an event differs drastically from someone else's version?,./prompts/science_3892_tara.wav,science,tara,True,0
 3893,What's your relationship with objects that belonged to people you've lost - do you keep them or find peace in releasing them?,./prompts/science_3893_zac.wav,science,zac,True,0
 3894,What's your philosophy on whether it's healthier to revisit painful memories or focus entirely on moving forward?,./prompts/science_3894_tara.wav,science,tara,True,0
 3895,What's your secret to distinguishing between genuine nostalgia and romanticizing a past that wasn't actually that great?,./prompts/science_3895_zac.wav,science,zac,True,0

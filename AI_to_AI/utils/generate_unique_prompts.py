@@ -17,7 +17,7 @@ class UniquePromptGenerator:
         self.client = AnthropicVertex(project_id=PROJECT_ID, region=LOCATION)
         self.existing_prompts = set()
         self.voice_toggle = True  # Start with 'zac'
-        self.current_prompt_id = 1081  # Start from 1081
+        self.current_prompt_id = 1929
         self.load_existing_prompts()
         
     def load_existing_prompts(self):
